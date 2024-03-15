@@ -1,0 +1,41 @@
+.categorySection {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 0.5rem;
+    grid-auto-flow: row;
+    margin: 1rem;
+    width: 65%;
+}
+
+@media (max-width: 1200px) {
+    .categorySection {
+        grid-template-columns: repeat(3, 1fr); /* Přepne na 3 sloupce na šířkách do 1200px */
+    }
+}
+
+@media (max-width: 900px) {
+    .categorySection {
+        grid-template-columns: repeat(2, 1fr); /* Přepne na 2 sloupce na šířkách do 900px */
+    }
+}
+
+.filterCategorySection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.categoryButton, .categoryDisplay {
+    border: none;
+    font-size: 1rem;
+    background-color: transparent;
+    color: white;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    border: 2px solid white;
+    max-width: 200px;
+    min-width: 100px;
+}
