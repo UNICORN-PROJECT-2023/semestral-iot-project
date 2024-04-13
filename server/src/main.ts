@@ -4,9 +4,12 @@ import { Swagger } from './config/swagger';
 import { Validator } from './config/validator';
 
 async function bootstrap() {
+  
   // init app
   const app = await NestFactory.create(AppModule);
 
+  app.setGlobalPrefix('api/v1');
+  
   // init swagger
   Swagger.init(app);
 
