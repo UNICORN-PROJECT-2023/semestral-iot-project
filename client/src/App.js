@@ -5,6 +5,7 @@ import Profile from './screens/ProfileScreen';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './components/Navbar';
 import Login from './screens/LoginScreen';
+import Warehouses from "./screens/WarehousesScreen";
 import ArticleDetailScreen from './screens/ArticleDetailScreen';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/warehouses" element={<Warehouses/>} />
           <Route path="/login" element={isLoggedIn() ? <Navigate to="/profile" /> : <Login />} />
           <Route path="/register" element={isLoggedIn() ? <Navigate to="/profile" /> : <Register />} />
           <Route path="/profile" element={!isLoggedIn() ? <Navigate to="/login" /> : <Profile />}/>
