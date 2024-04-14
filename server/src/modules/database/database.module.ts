@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Provider } from './database.providers';
-import { CustomerEntity } from './entity/customer.entity';
 import { CustomerDao } from './dao/customer.dao';
-import { ArticleDao } from './dao/article.dao'; 
-import { CustomerArticleDao } from './dao/customer-article.dao'; 
-import { CategoryDao } from './dao/category.dao';
-import { CategoryArticleDao } from './dao/category-article.dao';
+import { WarehouseDao } from './dao/warehouse.dao'; 
+import { CustomerWarehouseDao } from './dao/customer-warehouse.dao'; 
+import { WarehouseLogsDao } from './dao/warehouseLogs.dao';
 
 @Module({
   imports: [
@@ -14,17 +11,15 @@ import { CategoryArticleDao } from './dao/category-article.dao';
   ],
   providers: [
     CustomerDao,
-    ArticleDao, 
-    CustomerArticleDao, 
-    CategoryDao,
-    CategoryArticleDao,
+    WarehouseDao,
+    CustomerWarehouseDao,
+    WarehouseLogsDao,
   ],
   exports: [
     CustomerDao,
-    ArticleDao,
-    CustomerArticleDao,
-    CategoryDao,
-    CategoryArticleDao,
+    WarehouseDao,
+    CustomerWarehouseDao,
+    WarehouseLogsDao,
   ],
 })
 export class DatabaseModule {}

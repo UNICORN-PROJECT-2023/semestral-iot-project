@@ -2,25 +2,20 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString, IsStrongPassword, MaxLength, MinLength, isEnum } from "class-validator";
 import { UserType } from "../type/user-type";
 
-export class UserRegisterInDto {
-  
-  @IsEmail()
-  @ApiProperty({required: true})
-  email: string;
+export class WerehouseRegisterInDto {
 
   @IsString()
   @MinLength(3)
-  @MaxLength(20)
+  @MaxLength(30)
   @ApiProperty({required: true})
-  username: string;
+  id: string;
 
   @IsStrongPassword()
   @ApiProperty({required: true})
   password: string; 
   
-  constructor(email: string, username: string, password: string) {
-    this.email = email;
-    this.username = username;
+  constructor(id: string, password: string) {
+    this.id = id;
     this.password = password;
   }
 }

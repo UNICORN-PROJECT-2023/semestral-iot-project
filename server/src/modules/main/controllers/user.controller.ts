@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Post, Put, Req, Res, SetMetadata, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/modules/guard/decorators/roles.decorator';
 import { UserLoginInDto } from '../dto/user-login-in.dto';
 import { UserRegisterInDto } from '../dto/user-register-in.dto';
@@ -18,6 +18,7 @@ export class UserController {
 
   @Get("me")
   @Roles("user")
+  @ApiTags('user')
   async getMe(@Req() req: any): Promise<ResponseDto<CustomerEntity>> {
     const customerEntity: CustomerEntity = await this.userService.getMe(req.user.id);
 
@@ -32,6 +33,7 @@ export class UserController {
 
   @Put("me")
   @Roles("user")
+  @ApiTags('user')
   async putMe(@Req() req: any,@Body() userDto: UserPutInDto): Promise<ResponseDto<CustomerEntity>> {
     const customerEntity: CustomerEntity = await this.userService.putMe(req.user.id, userDto);
 
@@ -45,6 +47,7 @@ export class UserController {
   }
 
   @Post("login")
+  @ApiTags('anonymous', 'user')
   async login( @Body() userDto: UserLoginInDto): Promise<ResponseDto<UserTokenOutDto>> {
     const userTokenOutDto: UserTokenOutDto = await this.userService.login(userDto);
     
@@ -58,6 +61,7 @@ export class UserController {
   }
 
   @Post("register")
+  @ApiTags('anonymous', 'user')
   async register( @Body() userDto: UserRegisterInDto ): Promise<ResponseDto<UserTokenOutDto>> {
     const userTokenOutDto: UserTokenOutDto = await this.userService.register(userDto);
 

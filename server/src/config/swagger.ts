@@ -14,7 +14,7 @@ export class Swagger {
     const document = SwaggerModule.createDocument(app, config);
     
     // swagger init
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('api/v1/docs', app, document);
   }
 
 }
