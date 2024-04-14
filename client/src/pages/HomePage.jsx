@@ -13,7 +13,7 @@ const StyledWrapper = styled.div`
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    
+
     @media (max-width: 768px) {
         padding: 0 2rem;
     }
@@ -38,8 +38,8 @@ const StyledWrapper = styled.div`
         }
     }
 
-    span{
-        background: -webkit-linear-gradient(#C81C5D, #813082, #4D3D9A);
+    span {
+        background: -webkit-linear-gradient(#5c5c5c, #dddddd, #5c5c5c);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -57,13 +57,15 @@ const StyledWrapper = styled.div`
         border-radius: 0.5rem;
         font-weight: 700;
         letter-spacing: 2px;
-       }
-      .btn:hover {
+    }
+
+    .btn:hover {
         background-position: right center; /* change the direction of the change here */
-      }
-      .btn-1 {
-        background-image: linear-gradient(to right,  #4D3D9A 0%, #813082 50%, #4D3D9A 100%);
-      }
+    }
+
+    .btn-1 {
+        background-image: linear-gradient(to right, #5c5c5c 0%, #dddddd 50%, #5c5c5c 100%);
+    }
 `;
 
 function HomePage(props) {
@@ -80,7 +82,7 @@ function HomePage(props) {
     return (
         <>
             <StyledWrapper >
-                <h1>Welcome to <span>UUEduKit</span></h1>
+                <h1>Welcome to <span>ServerRoomWatch</span></h1>
                 <p>{props.description}</p>
                 <button className="btn btn-1" onClick={scrollToArticles}>Explore</button>
             </StyledWrapper>

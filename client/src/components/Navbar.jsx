@@ -1,4 +1,4 @@
-import logo from '../images/logo.png';
+import logo from '../images/server6.svg';
 import { useEffect, useState } from 'react';
 import UserService from '../services/userService';
 import { Link } from 'react-router-dom';
@@ -52,6 +52,7 @@ function Navbar() {
  
     const subPages = [
         { name: 'Home', path: '/' },
+        { name: 'Warehouses', path: '/warehouses' },
         ...(data.username
             ? [{ name: data.username, path: '/profile', loggedIn: true }]
             : [

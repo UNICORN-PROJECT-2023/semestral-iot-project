@@ -20,5 +20,5 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: black;
+    background: rgba(0, 0, 0, 0.18);
 }
