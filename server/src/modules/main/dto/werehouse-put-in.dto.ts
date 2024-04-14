@@ -7,20 +7,20 @@ export class WerehousePutInDto {
   @IsOptional()
   @IsNumber()
   @ApiProperty({required: true})
-  minTemperature: Number; 
+  minTemperature: number; 
 
   @IsOptional()
   @IsNumber()
   @ApiProperty({required: true})
-  maxTemperature: Number;
+  maxTemperature: number;
 
   @IsOptional()
   @IsNumber()
   @ApiProperty({required: true})
-  alertDuration: Number;
+  alertDuration: number;
 
 
-  constructor(minTemperature: Number, maxTemperature: Number, alertDuration: Number) {
+  constructor(minTemperature: number, maxTemperature: number, alertDuration: number) {
     this.minTemperature = minTemperature;
     this.maxTemperature = maxTemperature;
     this.alertDuration = alertDuration;

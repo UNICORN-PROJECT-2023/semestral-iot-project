@@ -12,18 +12,18 @@ export class WerehouseInDto {
 
   @IsNumber()
   @ApiProperty({required: true})
-  minTemperature: Number; 
+  minTemperature: number; 
 
   @IsNumber()
   @ApiProperty({required: true})
-  maxTemperature: Number;
+  maxTemperature: number;
 
   @IsNumber()
   @ApiProperty({required: true})
-  alertDuration: Number;
+  alertDuration: number;
 
 
-  constructor(iotId: string, minTemperature: Number, maxTemperature: Number, alertDuration: Number) {
+  constructor(iotId: string, minTemperature: number, maxTemperature: number, alertDuration: number) {
     this.iotId = iotId;
     this.minTemperature = minTemperature;
     this.maxTemperature = maxTemperature;

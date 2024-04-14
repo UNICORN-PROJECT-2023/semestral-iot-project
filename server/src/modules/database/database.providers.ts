@@ -1,12 +1,11 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomerArticleEntity } from './entity/customer-article.entity';
+import { CustomerWarehouseEntity } from './entity/customer-warehouse.entity';
 import { CustomerEntity } from './entity/customer.entity';
-import { ArticleEntity } from './entity/article.entity';
-import { CategoryEntity } from './entity/category.entity';
-import { CategoryArticleEntity } from './entity/category-article.entity';
+import { WarehouseEntity } from './entity/warehouse.entity';
+import { WarehouseLogsEntity } from './entity/warehouse-logs.entity';
 
 // List of entities
-const entities = [CustomerEntity, ArticleEntity, CustomerArticleEntity, CategoryEntity, CategoryArticleEntity]
+const entities = [CustomerEntity, CustomerWarehouseEntity, WarehouseEntity, WarehouseLogsEntity];
 
 export const Provider = [
   TypeOrmModule.forRoot({

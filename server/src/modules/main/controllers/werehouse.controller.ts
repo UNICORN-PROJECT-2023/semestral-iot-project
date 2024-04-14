@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Req, Res, SetMetadata, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res, SetMetadata, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/modules/guard/decorators/roles.decorator';
 import { UserLoginInDto } from '../dto/user-login-in.dto';
 import { UserRegisterInDto } from '../dto/user-register-in.dto';
@@ -16,22 +16,24 @@ import { WerehouseRecordInDto } from '../dto/werehouse-record-in.dto';
 import { WerehouseInDto } from '../dto/werehouse-in.dto';
 import { WerehousePutInDto } from '../dto/werehouse-put-in.dto';
 import { get } from 'http';
+import { WarehouseEntity } from 'src/modules/database/entity/warehouse.entity';
+import { WarehouseLogsEntity } from 'src/modules/database/entity/warehouse-logs.entity';
 
 @ApiBearerAuth()
-@Controller("/werehouse")
+@Controller("/warehouse")
 export class WerehouseController {
   constructor(private readonly werehouseService: WerehouseService) {}
 
   @Get("/")
   @Roles("user")
   @ApiTags('user')
-  async getMyWerehouses(@Req() req: any): Promise<ResponseDto<void>> {
-    // const werehouseEntity: WerehouseEntity = await this.werehouseService.getMyWerehouses(req.user.id);
+  async getMyWerehouses(@Req() req: any): Promise<ResponseDto<WarehouseEntity[]>> {
+    const werehouseEntity: WarehouseEntity[] = await this.werehouseService.getUserWerehouses(req.user.id);
   
-    const response = new ResponseDtoBuilder<void>()
+    const response = new ResponseDtoBuilder<WarehouseEntity[]>()
     .setStatusCode(200)
     .setMessage("Received werehouses")
-    // .setBody(werehouseEntity)
+    .setBody(werehouseEntity)
     .build();
   
     return response;
@@ -40,61 +42,70 @@ export class WerehouseController {
   @Post("/")
   @Roles("user")
   @ApiTags('user')
-  async postNewWerehouse(@Req() req: any, @Body() werehouseInDto: WerehouseInDto): Promise<ResponseDto<void>> {
-    // const werehouseEntity: WerehouseEntity = await this.werehouseService.getMyWerehouses(req.user.id);
+  async postNewWerehouse(@Req() req: any, @Body() warehouseInDto: WerehouseInDto): Promise<ResponseDto<WarehouseEntity>> {
+    const werehouseEntity: WarehouseEntity = await this.werehouseService.addNewWarehouse(warehouseInDto, req.user.id);
   
-    const response = new ResponseDtoBuilder<void>()
+    const response = new ResponseDtoBuilder<WarehouseEntity>()
     .setStatusCode(200)
     .setMessage("Claimed new werehouse")
-    // .setBody(werehouseEntity)
+    .setBody(werehouseEntity)
     .build();
   
     return response;
   }
 
-  @Put("/:werehouseId")
+  @Put("/:warehouseId")
   @Roles("user")
   @ApiTags('user')
-  @ApiParam({ name: 'werehouseId', type: Number })
-  async putWerehouse(@Req() req: any, @Body() werehousePutInDto: WerehousePutInDto): Promise<ResponseDto<void>> {
-    // const werehouseEntity: WerehouseEntity = await this.werehouseService.getMyWerehouses(req.user.id);
+  @ApiParam({ name: 'warehouseId', type: Number })
+  async putWerehouse(@Req() req: any, @Body() warehousePutInDto: WerehousePutInDto,  @Param('warehouseId') warehouseId: number): Promise<ResponseDto<WarehouseEntity>> {
+    const warehouseEntity: WarehouseEntity = await this.werehouseService.putWarehouse(warehousePutInDto, warehouseId, req.user.id);
   
-    const response = new ResponseDtoBuilder<void>()
+    const response = new ResponseDtoBuilder<WarehouseEntity>()
     .setStatusCode(200)
     .setMessage("Updated werehouse")
-    // .setBody(werehouseEntity)
+    .setBody(warehouseEntity)
     .build();
   
     return response;
   }
 
-  @Delete("/:werehouseId")
+  @Delete("/:warehouseId")
   @Roles("user")
   @ApiTags('user')
-  @ApiParam({ name: 'werehouseId', type: Number })
-  async deleteWerehouse(@Req() req: any): Promise<ResponseDto<void>> {
-    // const werehouseEntity: WerehouseEntity = await this.werehouseService.getMyWerehouses(req.user.id);
+  @ApiParam({ name: 'warehouseId', type: Number })
+  async deleteWerehouse(@Req() req: any, @Param('warehouseId') warehouseId: number): Promise<ResponseDto<void>> {
+    await this.werehouseService.deleteWarehouse(warehouseId, req.user.id);
   
     const response = new ResponseDtoBuilder<void>()
     .setStatusCode(200)
     .setMessage("Deleted werehouse")
-    // .setBody(werehouseEntity)
     .build();
   
     return response;
   }
 
   
-  @Get("/:werehouseId/record")
+  @Get("/:warehouseId/record")
   @Roles("user")
   @ApiTags('user')
-  @ApiParam({ name: 'werehouseId', type: Number })
-  async getData( @Req() req: any ): Promise<ResponseDto<void>> {
-    // await this.werehouseService.postData(werehouseInDto);
+  @ApiParam({ name: 'warehouseId', type: Number })
+  @ApiQuery({ name: 'length', type: Number })
+  @ApiQuery({ name: 'offset', type: Number })
+  async getData( 
+    @Req() req: any, 
+    @Param('warehouseId') warehouseId: number,
+    @Query('length') length: number,
+    @Query('offset') offset: number
+    ): Promise<ResponseDto<Array<WarehouseLogsEntity>>> {
+    const cstId = req.user.id;
     
-    const response = new ResponseDtoBuilder<void>()
+    const warehouseLogs: Array<WarehouseLogsEntity> = await this.werehouseService.getWarehouseLogs(warehouseId, cstId, length, offset);
+    
+    const response = new ResponseDtoBuilder<Array<WarehouseLogsEntity>>()
       .setStatusCode(200)
       .setMessage("Saved data")
+      .setBody(warehouseLogs)
       .build();
 
     return response;
@@ -103,8 +114,10 @@ export class WerehouseController {
   @Post("record")
   @Roles("iot")
   @ApiTags('iot')
-  async postData( @Body() werehouseInDto: WerehouseRecordInDto): Promise<ResponseDto<void>> {
-    await this.werehouseService.postData(werehouseInDto);
+  async postData(@Req() req: any, @Body() werehouseInDto: WerehouseRecordInDto): Promise<ResponseDto<void>> {
+    const id = req.user.id;
+
+    await this.werehouseService.postData(werehouseInDto, id);
     
     const response = new ResponseDtoBuilder<void>()
       .setStatusCode(200)

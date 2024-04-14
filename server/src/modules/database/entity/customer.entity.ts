@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { CustomerArticleEntity } from './customer-article.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { CustomerWarehouseEntity } from './customer-warehouse.entity';
+import { WarehouseEntity } from './warehouse.entity';
 
 @Entity({ name: 'customer' })
 export class CustomerEntity {
@@ -15,13 +16,19 @@ export class CustomerEntity {
   @Column({ name: 'c_password' })
   password: string;
 
-  @OneToMany(
-    () => CustomerArticleEntity,
-    (customerArticleEntity) => customerArticleEntity.customerEntity
-  )
-  customerArticleEntity: CustomerArticleEntity[];
+  @CreateDateColumn({ name: 'c_created_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  createdAt: Date;
 
-  constructor(email?: string, username?: string, password?: string) {
+  @UpdateDateColumn({ name: 'c_updated_at', type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+  updatedAt: Date;
+
+  @OneToMany(
+    () => CustomerWarehouseEntity,
+    (customerWarehouseEntity) => customerWarehouseEntity.customerEntity
+  )
+  customerWarehouseEntity: CustomerWarehouseEntity[];
+
+  constructor(email: string, username: string, password: string) {
     this.email = email;
     this.username = username;
     this.password = password;
