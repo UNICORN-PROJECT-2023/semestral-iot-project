@@ -79,12 +79,22 @@ function HomePage(props) {
             behavior: "smooth"
         });
     };
+    function isLoggedIn() {
+        return localStorage.getItem('token') ? true : false;
+    }
+    const handleOnClick = () => {
+        if (isLoggedIn()) {
+            window.location.href = '/warehouses';
+        } else {
+            window.location.href = '/login';
+        }
+    }
     return (
         <>
             <StyledWrapper >
                 <h1>Welcome to <span>ServerRoomWatch</span></h1>
                 <p>{props.description}</p>
-                <button className="btn btn-1" onClick={scrollToArticles}>Explore</button>
+                <button className="btn btn-1" onClick={handleOnClick}>Explore</button>
             </StyledWrapper>
                 <div ref={ArticleRef}></div>
             {/*<AllArticlesComponent/>*/}

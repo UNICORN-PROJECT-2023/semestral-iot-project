@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
-import {Container, Typography, Table, TableBody, TableCell, TableHead, TableRow} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Container, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import ApiService from "../services/apiService";
 import styled from "styled-components";
-
+import EditWarehouseModal from "./EditWarehouseModal";
 
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 60px); // Assuming Navbar is 60px high
-    padding-top: 60px; // Push content down by the height of the Navbar
-    background-color: #0D1117; // Optional: Background color
+    min-height: calc(100vh - 60px);
+    padding-top: 140px;
+    background-color: #0D1117;
 
     @media (max-width: 768px) {
         padding: 60px 2rem 0;
@@ -21,7 +21,7 @@ const StyledWrapper = styled.div`
 
 const WarehouseDetail = () => {
     const apiService = new ApiService();
-    const {warehouseId} = useParams();
+    const { warehouseId } = useParams();
     const [records, setRecords] = useState([]);
     const [warehouse, setWarehouse] = useState(null);
 
@@ -51,14 +51,41 @@ const WarehouseDetail = () => {
         }
     };
 
+    // Method to refresh the warehouse details after update
+    const handleUpdate = () => {
+        fetchWarehouseDetails();
+    };
+
     return (
         <StyledWrapper>
             <Container>
                 {warehouse && (
-                    <Typography variant="h4" sx={{mb: 2}}>
-                        Warehouse-{warehouse.id}
-                    </Typography>
+                    <>
+                        <Typography variant="h4" sx={{ mb: 2 }}>
+                            Warehouse-{warehouse.id}
+                        </Typography>
+                        <Typography variant="body1" sx={{ mb: 1 }}>
+                            Min Temperature: {warehouse.temperatureMin}°C
+                        </Typography>
+                        <Typography variant="body1" sx={{ mb: 1 }}>
+                            Max Temperature: {warehouse.temperatureMax}°C
+                        </Typography>
+                        <Typography variant="body1" sx={{ mb: 1 }}>
+                            Alert Min Duration: {warehouse.allertMinDuration} minutes
+                        </Typography>
+                        <EditWarehouseModal
+                            apiService={apiService}
+                            warehouseId={warehouseId}
+                            initialData={{
+                                minTemperature: warehouse.minTemperature,
+                                maxTemperature: warehouse.maxTemperature,
+                                alertDuration: warehouse.alertDuration
+                            }}
+                            onUpdated={handleUpdate}
+                        />
+                    </>
                 )}
+
                 <Table>
                     <TableHead>
                         <TableRow>
