@@ -77,9 +77,9 @@ const WarehouseDetail = () => {
                             apiService={apiService}
                             warehouseId={warehouseId}
                             initialData={{
-                                minTemperature: warehouse.minTemperature,
-                                maxTemperature: warehouse.maxTemperature,
-                                alertDuration: warehouse.alertDuration
+                                minTemperature: warehouse.temperatureMin,
+                                maxTemperature: warehouse.temperatureMax,
+                                alertDuration: warehouse.allertMinDuration
                             }}
                             onUpdated={handleUpdate}
                         />

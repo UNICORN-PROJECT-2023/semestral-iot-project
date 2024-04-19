@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import {Button, Modal, Box, Typography, TextField, Stack} from '@mui/material';
+import {Button, Modal, Box, Typography, TextField, Stack, Snackbar, Alert} from '@mui/material';
 import {motion} from "framer-motion";
 
 const style = {
@@ -36,16 +36,21 @@ const StyledWrapper = styled.div`
 
 
 const CreateWarehouseModal = ({apiService, refreshWarehouses}) => {
-    const [open, setOpen] = useState(false);
-    const [formData, setFormData] = useState({
+    const initialState = {
         iotId: '',
         minTemperature: '',
         maxTemperature: '',
         alertDuration: ''
-    });
+    };
+    const [open, setOpen] = useState(false);
+    const [error, setError] = useState('');
+    const [formData, setFormData] = useState(initialState);
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setFormData(initialState);
+        setOpen(false);
+    }
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -55,28 +60,46 @@ const CreateWarehouseModal = ({apiService, refreshWarehouses}) => {
         }));
     };
 
+    const validateData = () => {
+        if (!formData.iotId) {
+            setError('IoT ID must not be empty.');
+            return false;
+        }
+        if (formData.minTemperature >= formData.maxTemperature) {
+            setError('Max Temperature must be greater than Min Temperature.');
+            return false;
+        }
+        if (formData.alertDuration <= 0) {
+            setError('Alert Duration must be greater than 0.');
+            return false;
+        }
+        return true;
+    };
+
     const handleSubmit = async () => {
         // Prepare data for submission by converting string values to proper numeric types
-        const dataToSubmit = {
-            iotId: formData.iotId,
-            minTemperature: parseFloat(formData.minTemperature), // Convert to float
-            maxTemperature: parseFloat(formData.maxTemperature), // Convert to float
-            alertDuration: parseInt(formData.alertDuration, 10) // Convert to integer
-        };
+        if (validateData()) {
+            const dataToSubmit = {
+                iotId: formData.iotId,
+                minTemperature: parseFloat(formData.minTemperature), // Convert to float
+                maxTemperature: parseFloat(formData.maxTemperature), // Convert to float
+                alertDuration: parseInt(formData.alertDuration, 10) // Convert to integer
+            };
 
-        // Validate the conversions (optional but recommended)
-        if (isNaN(dataToSubmit.minTemperature) || isNaN(dataToSubmit.maxTemperature) || isNaN(dataToSubmit.alertDuration)) {
-            console.error('Invalid input: Please ensure all fields are filled correctly.');
-            return; // Exit the function if validation fails
-        }
+            // Validate the conversions (optional but recommended)
+            if (isNaN(dataToSubmit.minTemperature) || isNaN(dataToSubmit.maxTemperature) || isNaN(dataToSubmit.alertDuration)) {
+                console.error('Invalid input: Please ensure all fields are filled correctly.');
+                return; // Exit the function if validation fails
+            }
 
-        try {
-            const response = await apiService.post('/warehouse', dataToSubmit);
-            console.log(response); // Log or handle the response further
-            refreshWarehouses(); // Call to refresh the warehouse list
-            handleClose(); // Close the modal after successful submission
-        } catch (error) {
-            console.error('Failed to create warehouse:', error);
+            try {
+                const response = await apiService.post('/warehouse', dataToSubmit);
+                console.log(response); // Log or handle the response further
+                refreshWarehouses(); // Call to refresh the warehouse list
+                handleClose(); // Close the modal after successful submission
+            } catch (error) {
+                console.error('Failed to create warehouse:', error);
+            }
         }
     };
 
@@ -141,6 +164,13 @@ const CreateWarehouseModal = ({apiService, refreshWarehouses}) => {
                                 Submit
                             </motion.button>
                         </Stack>
+                        {error && (
+                            <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={() => setError('')}>
+                                <Alert onClose={() => setError('')} severity="error" sx={{ width: '100%' }}>
+                                    {error}
+                                </Alert>
+                            </Snackbar>
+                        )}
                     </Box>
                 </Modal>
             </StyledWrapper>
