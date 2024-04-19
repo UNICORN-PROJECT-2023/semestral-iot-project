@@ -20,6 +20,7 @@ import { WerehouseInDto } from '../dto/werehouse-in.dto';
 import { CustomerWarehouseEntity } from 'src/modules/database/entity/customer-warehouse.entity';
 import { WerehousePutInDto } from '../dto/werehouse-put-in.dto';
 import { WarehouseLogsEntity } from 'src/modules/database/entity/warehouse-logs.entity';
+import { WerehouseLoginInDto } from '../dto/werehouse-login-in.dto';
 
 
 @Injectable()
@@ -52,6 +53,16 @@ export class WerehouseService {
   
 
   async register(werehouseInDto: WerehouseRegisterInDto): Promise<UserTokenOutDto> {
+    if(werehouseInDto.secretKey != process.env.SECRET_KEY) {
+      throw new ForbiddenException("Wrong secret key");
+    }
+
+    const werehouseEntity = await this.warehouseDao.findByWarehouseId(werehouseInDto.id);
+
+    if(werehouseEntity) {
+      throw new BadRequestException("Warehouse already exists");
+    }
+
     werehouseInDto.password = await this.passwordService.hashPassword(werehouseInDto.password);
 
     const warehouseEntity: WarehouseEntity = new WarehouseEntity(
@@ -69,7 +80,7 @@ export class WerehouseService {
   }
 
 
-  async login(warehouseInDto: WerehouseRegisterInDto): Promise<UserTokenOutDto> {
+  async login(warehouseInDto: WerehouseLoginInDto): Promise<UserTokenOutDto> {
     const warehouseEntity: WarehouseEntity = await this.warehouseDao.findByWarehouseId(warehouseInDto.id);
     
     if(!warehouseEntity)  {

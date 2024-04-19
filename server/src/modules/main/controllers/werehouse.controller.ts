@@ -18,6 +18,7 @@ import { WerehousePutInDto } from '../dto/werehouse-put-in.dto';
 import { get } from 'http';
 import { WarehouseEntity } from 'src/modules/database/entity/warehouse.entity';
 import { WarehouseLogsEntity } from 'src/modules/database/entity/warehouse-logs.entity';
+import { WerehouseLoginInDto } from '../dto/werehouse-login-in.dto';
 
 @ApiBearerAuth()
 @Controller("/warehouse")
@@ -129,7 +130,7 @@ export class WerehouseController {
 
   @Post("login")
   @ApiTags('anonymous', 'iot')
-  async login( @Body() werehouseInDto: WerehouseRegisterInDto): Promise<ResponseDto<UserTokenOutDto>> {
+  async login( @Body() werehouseInDto: WerehouseLoginInDto): Promise<ResponseDto<UserTokenOutDto>> {
     const userTokenOutDto: UserTokenOutDto = await this.werehouseService.login(werehouseInDto);
     
     const response = new ResponseDtoBuilder<UserTokenOutDto>()
