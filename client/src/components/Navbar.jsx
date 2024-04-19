@@ -52,9 +52,8 @@ function Navbar() {
  
     const subPages = [
         { name: 'Home', path: '/' },
-        { name: 'Warehouses', path: '/warehouses' },
         ...(data.username
-            ? [{ name: data.username, path: '/profile', loggedIn: true }]
+            ? [{ name: 'Warehouses', path: '/warehouses' }]
             : [
                 { name: 'Login', path: '/login', loggedIn: false },
                 { name: 'Register', path: '/register', loggedIn: false },

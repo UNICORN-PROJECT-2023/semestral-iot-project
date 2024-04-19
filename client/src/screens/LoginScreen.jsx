@@ -43,7 +43,7 @@ function LoginScreen() {
     const password = passwordRef.current.value;
     try {
       const response = await userService.login(email, password);
-      navigate('/profile/');
+      navigate('/warehouses/');
       window.location.reload();
       console.log(response)
     } catch (error) {

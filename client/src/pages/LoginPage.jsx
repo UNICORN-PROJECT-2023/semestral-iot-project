@@ -48,7 +48,7 @@ const StyledWrapper = styled.div`
         letter-spacing: 1px;
         font-weight: bold;
         cursor: ${props => props.disabled ? '' : 'pointer'};
-        background-image: linear-gradient(${props => props.disabled ? '#d3d3d3' : '#c81c5d'}, ${props => props.disabled ? '#a8a8a8' : '#4d3d9a'});
+        background-image: linear-gradient(${props => props.disabled ? '#d3d3d3' : '#5c5c5c'}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
     }
 
     p {

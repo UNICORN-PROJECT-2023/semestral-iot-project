@@ -26,8 +26,8 @@ function App() {
           <Route path="/warehouses" element={<Warehouses/>} />
           <Route path="/login" element={isLoggedIn() ? <Navigate to="/profile" /> : <Login />} />
           <Route path="/register" element={isLoggedIn() ? <Navigate to="/profile" /> : <Register />} />
-          <Route path="/profile" element={!isLoggedIn() ? <Navigate to="/login" /> : <Profile />}/>
-          <Route path="/Article/:id" element={<ArticleDetailScreen/>}/>
+          {/*<Route path="/profile" element={!isLoggedIn() ? <Navigate to="/login" /> : <Profile />}/>*/}
+          {/*<Route path="/Article/:id" element={<ArticleDetailScreen/>}/>*/}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

@@ -87,7 +87,7 @@ function HomePage(props) {
                 <button className="btn btn-1" onClick={scrollToArticles}>Explore</button>
             </StyledWrapper>
                 <div ref={ArticleRef}></div>
-            <AllArticlesComponent/>
+            {/*<AllArticlesComponent/>*/}
         </>
     );
 }
