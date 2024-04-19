@@ -64,7 +64,7 @@ function Navbar() {
     return (
         <nav className="navbar fixed-top navbar-expand-lg navbar-dark" style={{ backgroundColor: '#0D1117' }}>
             <Link className="navbar-brand" to="/" >
-                <img src={logo} width="115" height="115" alt="" />
+                <img src={logo} width="80" height="80" alt="" />
             </Link>
             <button className="navbar-toggler" type="button" style={{ margin: '0.4rem 2rem' }} onClick={handleSidebarToggle} aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
                 <span className="navbar-toggler-icon"></span>

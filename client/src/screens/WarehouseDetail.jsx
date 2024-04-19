@@ -13,7 +13,7 @@ const StyledWrapper = styled.div`
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - 60px);
-    padding-top: 140px;
+    padding-top: 100px;
     background-color: #0D1117;
 
     button {
@@ -27,7 +27,7 @@ const StyledWrapper = styled.div`
         cursor: ${props => props.disabled ? '' : 'pointer'};
         background-image: linear-gradient(${props => props.disabled ? '#d3d3d3' : '#5c5c5c'}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
     }
-    
+
     @media (max-width: 768px) {
         padding: 60px 2rem 0;
     }
