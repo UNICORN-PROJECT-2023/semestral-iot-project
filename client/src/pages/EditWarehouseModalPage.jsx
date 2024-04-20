@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, Stack, Snackbar, Alert } from '@mui/material';
-import { motion } from "framer-motion";
+import React from 'react';
+import {Modal, Box, Typography, TextField, Stack, Snackbar, Alert} from '@mui/material';
+import {motion} from "framer-motion";
 import styled from "styled-components";
-import {useNotification} from "../context/NotificationContext";
 
 const style = {
     position: 'absolute',
@@ -20,7 +19,6 @@ const StyledWrapper = styled.div`
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    margin-bottom: 20px;
 
     button {
         color: #fff;
@@ -35,68 +33,24 @@ const StyledWrapper = styled.div`
     }
 `;
 
-const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated }) => {
-    const [open, setOpen] = useState(false);
-    const initialState = {
-        minTemperature: initialData.minTemperature,
-        maxTemperature: initialData.maxTemperature,
-        alertDuration: initialData.alertDuration
-    };
-    const [formData, setFormData] = useState(initialState);
-    const [error, setError] = useState('');
-
-    const showNotification = useNotification();
-
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-        setFormData(formData);
-        setError('');
-        setOpen(false);
-    }
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData(prev => ({ ...prev, [name]: parseFloat(value) || '' }));
-    };
-
-    const validateData = () => {
-        if (formData.minTemperature >= formData.maxTemperature) {
-            showNotification('error', 'Minimum Temperature must be less than Maximum Temperature.');
-            return false;
-        }
-        if (formData.alertDuration <= 0) {
-            showNotification('error', 'Alert Duration must be greater than 0.');
-            return false;
-        }
-        return true;
-    };
-
-    const handleSubmit = async () => {
-        if (validateData()) {
-            try {
-                const response = await apiService.put(`/warehouse/${warehouseId}`, formData);
-                if (response.ok) {
-                    showNotification('success', 'Warehouse details updated successfully.');
-                } else {
-                    showNotification('error', 'Failed to update warehouse. Please try again.');
-                }
-                onUpdated();
-                setFormData(formData);
-                handleClose();
-            } catch (error) {
-                console.error('Error updating warehouse:', error);
-                showNotification('error', 'Failed to update warehouse. Please try again.');
-            }
-        }
-    };
-
+const EditWarehouseModalPage = ({
+                                    open,
+                                    handleOpen,
+                                    handleClose,
+                                    formData,
+                                    handleChange,
+                                    handleSubmit,
+                                    error,
+                                    setError
+                                }) => {
     return (
         <>
             <StyledWrapper>
                 <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={{scale: 1.1}}
+                    whileTap={{scale: 0.9}}
                     onClick={handleOpen}
+                    style={{margin: '20px'}}
                 >
                     Edit configuration
                 </motion.button>
@@ -110,14 +64,14 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
                         <Typography id="modal-title" variant="h6" component="h2">
                             Edit Warehouse Details
                         </Typography>
-                        <Stack spacing={2} sx={{ mt: 2 }}>
+                        <Stack spacing={2} sx={{mt: 2}}>
                             <TextField
                                 label="Minimum Temperature"
                                 variant="outlined"
                                 name="minTemperature"
                                 type="number"
                                 value={formData.minTemperature}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e.target.name, e.target.value)}
                             />
                             <TextField
                                 label="Maximum Temperature"
@@ -125,7 +79,7 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
                                 name="maxTemperature"
                                 type="number"
                                 value={formData.maxTemperature}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e.target.name, e.target.value)}
                             />
                             <TextField
                                 label="Alert Duration (minutes)"
@@ -133,11 +87,11 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
                                 name="alertDuration"
                                 type="number"
                                 value={formData.alertDuration}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e.target.name, e.target.value)}
                             />
                             <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
+                                whileHover={{scale: 1.1}}
+                                whileTap={{scale: 0.9}}
                                 onClick={handleSubmit}
                             >
                                 Save Changes
@@ -145,7 +99,7 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
                         </Stack>
                         {error && (
                             <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={() => setError('')}>
-                                <Alert onClose={() => setError('')} severity="error" sx={{ width: '100%' }}>
+                                <Alert onClose={() => setError('')} severity="error" sx={{width: '100%'}}>
                                     {error}
                                 </Alert>
                             </Snackbar>
@@ -157,4 +111,4 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
     );
 };
 
-export default EditWarehouseModal;
+export default EditWarehouseModalPage;

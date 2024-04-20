@@ -1,6 +1,6 @@
 import {Legend, Line, LineChart, ReferenceArea, ReferenceLine, Tooltip, XAxis, YAxis} from "recharts";
 
-function GraphScreen({records, minTemperature, maxTemperature}) {
+function Graph({records, minTemperature, maxTemperature}) {
 
     const OFFSET = 3;
 
@@ -20,4 +20,4 @@ function GraphScreen({records, minTemperature, maxTemperature}) {
     );
 }
 
-export default GraphScreen;
+export default Graph;

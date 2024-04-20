@@ -7,7 +7,7 @@ import Login from './screens/LoginScreen';
 import Warehouses from "./screens/WarehousesScreen";
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
-import WarehouseDetail from "./screens/WarehouseDetail";
+import WarehouseDetailScreen from "./screens/WarehouseDetailScreen";
 
 function App() {
   function isLoggedIn() {
@@ -23,7 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/warehouses" element={<Warehouses/>} />
-          <Route path="/warehouses/:warehouseId" element={<WarehouseDetail />} /> {/* New route for warehouse details */}
+          <Route path="/warehouses/:warehouseId" element={<WarehouseDetailScreen />} /> {/* New route for warehouse details */}
           <Route path="/login" element={isLoggedIn() ? <Navigate to="/profile" /> : <Login />} />
           <Route path="/register" element={isLoggedIn() ? <Navigate to="/profile" /> : <Register />} />
           {/*<Route path="/profile" element={!isLoggedIn() ? <Navigate to="/login" /> : <Profile />}/>*/}
