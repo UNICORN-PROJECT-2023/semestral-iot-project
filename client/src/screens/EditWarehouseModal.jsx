@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button, Stack, Snackbar, Alert } from '@mui/material';
 import { motion } from "framer-motion";
 import styled from "styled-components";
+import {useNotification} from "../context/NotificationContext";
 
 const style = {
     position: 'absolute',
@@ -44,6 +45,8 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
     const [formData, setFormData] = useState(initialState);
     const [error, setError] = useState('');
 
+    const showNotification = useNotification();
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setFormData(formData);
@@ -58,11 +61,11 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
 
     const validateData = () => {
         if (formData.minTemperature >= formData.maxTemperature) {
-            setError('Max Temperature must be greater than Min Temperature.');
+            showNotification('error', 'Minimum Temperature must be less than Maximum Temperature.');
             return false;
         }
         if (formData.alertDuration <= 0) {
-            setError('Alert Duration must be greater than 0.');
+            showNotification('error', 'Alert Duration must be greater than 0.');
             return false;
         }
         return true;
@@ -71,13 +74,18 @@ const EditWarehouseModal = ({ apiService, warehouseId, initialData, onUpdated })
     const handleSubmit = async () => {
         if (validateData()) {
             try {
-                await apiService.put(`/warehouse/${warehouseId}`, formData);
+                const response = await apiService.put(`/warehouse/${warehouseId}`, formData);
+                if (response.ok) {
+                    showNotification('success', 'Warehouse details updated successfully.');
+                } else {
+                    showNotification('error', 'Failed to update warehouse. Please try again.');
+                }
                 onUpdated();
                 setFormData(formData);
                 handleClose();
             } catch (error) {
                 console.error('Error updating warehouse:', error);
-                setError('Failed to update warehouse. Please try again.');
+                showNotification('error', 'Failed to update warehouse. Please try again.');
             }
         }
     };

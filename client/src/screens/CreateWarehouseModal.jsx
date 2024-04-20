@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import {Button, Modal, Box, Typography, TextField, Stack, Snackbar, Alert} from '@mui/material';
+import {Modal, Box, Typography, TextField, Stack} from '@mui/material';
 import {motion} from "framer-motion";
+import {useNotification} from "../context/NotificationContext";
 
 const style = {
     position: 'absolute',
@@ -43,8 +44,9 @@ const CreateWarehouseModal = ({apiService, refreshWarehouses}) => {
         alertDuration: ''
     };
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState('');
     const [formData, setFormData] = useState(initialState);
+
+    const showNotification = useNotification();
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -62,15 +64,15 @@ const CreateWarehouseModal = ({apiService, refreshWarehouses}) => {
 
     const validateData = () => {
         if (!formData.iotId) {
-            setError('IoT ID must not be empty.');
+            showNotification('error', 'IoT ID must not be empty.');
             return false;
         }
         if (formData.minTemperature >= formData.maxTemperature) {
-            setError('Max Temperature must be greater than Min Temperature.');
+            showNotification('error', 'Max Temperature must be greater than Min Temperature.');
             return false;
         }
         if (formData.alertDuration <= 0) {
-            setError('Alert Duration must be greater than 0.');
+            showNotification('error', 'Alert Duration must be greater than 0.');
             return false;
         }
         return true;
@@ -95,9 +97,15 @@ const CreateWarehouseModal = ({apiService, refreshWarehouses}) => {
             try {
                 const response = await apiService.post('/warehouse', dataToSubmit);
                 console.log(response); // Log or handle the response further
+                if (response.status === 201) {
+                    showNotification('success', 'Warehouse created successfully.');
+                } else {
+                    showNotification('error', 'Failed to create warehouse.');
+                }
                 refreshWarehouses(); // Call to refresh the warehouse list
                 handleClose(); // Close the modal after successful submission
             } catch (error) {
+                showNotification('error', 'Failed to create warehouse.');
                 console.error('Failed to create warehouse:', error);
             }
         }
@@ -164,13 +172,6 @@ const CreateWarehouseModal = ({apiService, refreshWarehouses}) => {
                                 Submit
                             </motion.button>
                         </Stack>
-                        {error && (
-                            <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={() => setError('')}>
-                                <Alert onClose={() => setError('')} severity="error" sx={{ width: '100%' }}>
-                                    {error}
-                                </Alert>
-                            </Snackbar>
-                        )}
                     </Box>
                 </Modal>
             </StyledWrapper>
