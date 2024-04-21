@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import AllArticlesComponent from '../components/AllArticlesComponent';
-import { useRef } from 'react';
+
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -69,25 +68,23 @@ const StyledWrapper = styled.div`
 `;
 
 function HomePage(props) {
-    const ArticleRef = useRef(null);
-    const scrollToArticles = () => {
-        const offset = 150; // velikost navbaru v pixelech
-        const elementPosition = ArticleRef.current.getBoundingClientRect().top;
-        const offsetPosition = elementPosition - offset;
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
-        });
-    };
+    function isLoggedIn() {
+        return localStorage.getItem('token') ? true : false;
+    }
+    const handleOnClick = () => {
+        if (isLoggedIn()) {
+            window.location.href = '/warehouses';
+        } else {
+            window.location.href = '/login';
+        }
+    }
     return (
         <>
             <StyledWrapper >
                 <h1>Welcome to <span>ServerRoomWatch</span></h1>
                 <p>{props.description}</p>
-                <button className="btn btn-1" onClick={scrollToArticles}>Explore</button>
+                <button className="btn btn-1" onClick={handleOnClick}>Explore</button>
             </StyledWrapper>
-                <div ref={ArticleRef}></div>
-            <AllArticlesComponent/>
         </>
     );
 }

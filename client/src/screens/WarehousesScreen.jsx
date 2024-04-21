@@ -1,11 +1,28 @@
+import React, { useState, useEffect } from 'react';
+import ApiService from "../services/apiService";
+import WarehousesPage from '../pages/WarehousesPage';
 
-function WarehousesScreen() {
-  return (
-    <div>
-      <h1>Warehouses</h1>
+const WarehousesScreen = () => {
+    const apiService = new ApiService();
+    const [warehouses, setWarehouses] = useState([]);
 
-    </div>
-  );
-}
+    useEffect(() => {
+        fetchWarehouseData();
+    }, []);
+
+    const fetchWarehouseData = async () => {
+        try {
+            const response = await apiService.get('/warehouse');
+            const json = await response.json();
+            setWarehouses(json.body);
+        } catch (error) {
+            console.error('Error fetching warehouse data:', error);
+        }
+    };
+
+    return (
+        <WarehousesPage warehouses={warehouses} refreshWarehouses={fetchWarehouseData} apiService={apiService} />
+    );
+};
 
 export default WarehousesScreen;
