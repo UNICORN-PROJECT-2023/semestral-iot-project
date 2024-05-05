@@ -26,6 +26,8 @@ import { WerehouseLoginInDto } from '../dto/werehouse-login-in.dto';
 @Injectable()
 export class WerehouseService {
 
+  private SECRET_KEY = process.env.SECRET_KEY || "secret";
+
   constructor(
     @Inject(CustomerDao)
     private customerDao: CustomerDao,
@@ -53,7 +55,7 @@ export class WerehouseService {
   
 
   async register(werehouseInDto: WerehouseRegisterInDto): Promise<UserTokenOutDto> {
-    if(werehouseInDto.secretKey != process.env.SECRET_KEY) {
+    if(werehouseInDto.secretKey != this.SECRET_KEY) {
       throw new ForbiddenException("Wrong secret key");
     }
 
