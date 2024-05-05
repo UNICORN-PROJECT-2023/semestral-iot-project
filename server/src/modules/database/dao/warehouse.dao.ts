@@ -63,9 +63,9 @@ export class WarehouseDao {
     });
 
     // validate if article exists
-    if (tempArticleEntity.length === 0) {
-      throw new BadRequestException("Article by id not exists");
-    }
+    // if (tempArticleEntity.length === 0) {
+    //   throw new BadRequestException("Article by id not exists");
+    // }
 
     return tempArticleEntity[0];
   }

@@ -53,7 +53,9 @@ export class WerehouseService {
   
 
   async register(werehouseInDto: WerehouseRegisterInDto): Promise<UserTokenOutDto> {
-    if(werehouseInDto.secretKey != process.env.SECRET_KEY) {
+
+    const secretkey = process.env.SECRET_KEY || "secret";
+    if(werehouseInDto.secretKey != secretkey) {
       throw new ForbiddenException("Wrong secret key");
     }
 

@@ -10,11 +10,12 @@ const entities = [CustomerEntity, CustomerWarehouseEntity, WarehouseEntity, Ware
 export const Provider = [
   TypeOrmModule.forRoot({
     type: 'postgres',
-    host: process.env.POSTGRES_HOST || 'localhost',
-    port: Number(process.env.POSTGRES_PORT) || 5432,  
-    username: process.env.POSTGRES_USER || 'admin',
-    password: process.env.POSTGRES_PASSWORD || '1234',
-    database: process.env.POSTGRES_DATABASE || 'postgres',
+    url: process.env.DATABASE_URL,
+    // host: process.env.POSTGRES_HOST || 'localhost',
+    // port: Number(process.env.POSTGRES_PORT) || 5432,
+    // username: process.env.POSTGRES_USER || 'admin',
+    // password: process.env.POSTGRES_PASSWORD || '1234',
+    // database: process.env.POSTGRES_DATABASE || 'postgres',
     entities: entities,
     synchronize: true,
   }),
