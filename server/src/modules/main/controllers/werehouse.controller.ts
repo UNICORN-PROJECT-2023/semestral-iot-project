@@ -12,7 +12,7 @@ import { CustomerEntity } from 'src/modules/database/entity/customer.entity';
 import { UserPutInDto } from '../dto/user-put-in.dto';
 import { WerehouseService } from '../services/werehouse.service';
 import { WerehouseRegisterInDto } from '../dto/werehouse-register-in.dto';
-import { WerehouseRecordInDto } from '../dto/werehouse-record-in.dto';
+import { WerehouseRecordBathInDto, WerehouseRecordInDto } from '../dto/werehouse-record-in.dto';
 import { WerehouseInDto } from '../dto/werehouse-in.dto';
 import { WerehousePutInDto } from '../dto/werehouse-put-in.dto';
 import { get } from 'http';
@@ -115,7 +115,7 @@ export class WerehouseController {
   @Post("record")
   @Roles("iot")
   @ApiTags('iot')
-  async postData(@Req() req: any, @Body() werehouseInDto: WerehouseRecordInDto): Promise<ResponseDto<void>> {
+  async postData(@Req() req: any, @Body() werehouseInDto: WerehouseRecordBathInDto): Promise<ResponseDto<void>> {
     const id = req.user.id;
 
     await this.werehouseService.postData(werehouseInDto, id);

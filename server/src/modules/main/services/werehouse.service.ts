@@ -9,7 +9,7 @@ import { PasswordService } from './password.service';
 import { JwtService } from 'src/modules/guard/service/jwt.service';
 import { UserPutInDto } from '../dto/user-put-in.dto';
 import { WerehouseRegisterInDto } from '../dto/werehouse-register-in.dto';
-import { WerehouseRecordInDto } from '../dto/werehouse-record-in.dto';
+import { WerehouseRecordBathInDto, WerehouseRecordInDto } from '../dto/werehouse-record-in.dto';
 import { WarehouseDao } from 'src/modules/database/dao/warehouse.dao';
 import { WarehouseEntity } from 'src/modules/database/entity/warehouse.entity';
 import { WarehouseLogsTransformer } from '../transformer/warehouse-logs.transformer';
@@ -45,12 +45,20 @@ export class WerehouseService {
 
   /** IOT FUNCTIONS */
 
-  async postData(werehouseInDto: WerehouseRecordInDto, id: number): Promise<void> {
+  async postData(werehouseInDto: WerehouseRecordBathInDto, id: number): Promise<void> {
     const warehouseEntity = await this.warehouseDao.findById(id);
 
-    const warehouseLogsEntity = WarehouseLogsTransformer.dtoToEntity(werehouseInDto, warehouseEntity);
+    // validate if werehouseInDto values have unique dates
+    const dates = werehouseInDto.values.map((value) => value.date);
+    if(new Set(dates).size !== dates.length) {
+      throw new BadRequestException("Dates must be unique");
+    }
 
-    await this.warehouseLogsDao.add(warehouseLogsEntity);
+    for (let i = 0; i < werehouseInDto.values.length; i++) {
+      const warehouseLogsEntity = WarehouseLogsTransformer.dtoToEntity(werehouseInDto.values[i], warehouseEntity);
+
+      await this.warehouseLogsDao.add(warehouseLogsEntity);
+    }
   }
   
 
