@@ -57,10 +57,14 @@ export class WerehouseService {
       throw new ForbiddenException("Wrong secret key");
     }
 
-    const werehouseEntity = await this.warehouseDao.findByWarehouseId(werehouseInDto.id);
+    try {
+      const werehouseEntity = await this.warehouseDao.findByWarehouseId(werehouseInDto.id);
 
-    if(werehouseEntity) {
-      throw new BadRequestException("Warehouse already exists");
+      if(werehouseEntity) {
+        throw new BadRequestException("Warehouse already exists");
+      }
+    } catch(e) {
+      console.log("Warehouse not found");
     }
 
     werehouseInDto.password = await this.passwordService.hashPassword(werehouseInDto.password);
