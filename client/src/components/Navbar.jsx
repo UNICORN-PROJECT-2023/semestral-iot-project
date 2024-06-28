@@ -4,12 +4,39 @@ import UserService from '../services/userService';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import styled, { useTheme } from 'styled-components';
+import { FaSun, FaMoon } from 'react-icons/fa';
 import '../styles/NavbarStyles.css';
 
-function Navbar() {
+const NavbarWrapper = styled.nav`
+    background-color: ${props => props.theme.navbarBackgroundColor};
+    color: ${props => props.theme.textColor};
+`;
+
+const ToggleButton = styled.button`
+    background: ${props => props.theme.buttonBackground};
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    margin: 20px;
+    color: ${props => props.theme.buttonTextColor};
+    font-size: 1.2rem;
+    transition: background 0.3s ease;
+
+    &:focus {
+        outline: none;
+    }
+`;
+
+function Navbar({ toggleTheme }) {
     const [showSidebar, setShowSidebar] = useState(false);
     const userService = new UserService();
     const navigate = useNavigate();
+    const theme = useTheme();
     const [data, setData] = useState({
         username: "",
         email: "",
@@ -42,14 +69,12 @@ function Navbar() {
     }
 
     const linkStyle = {
-        color: 'white',
+        color: theme.textColor,
         fontSize: '1.3rem',
         fontWeight: 'bold',
         letterSpacing: '2px',
-        
     }
 
- 
     const subPages = [
         { name: 'Home', path: '/' },
         ...(data.username
@@ -62,14 +87,14 @@ function Navbar() {
     ];
 
     return (
-        <nav className="navbar fixed-top navbar-expand-lg navbar-dark" style={{ backgroundColor: '#0D1117' }}>
+        <NavbarWrapper className="navbar fixed-top navbar-expand-lg navbar-dark">
             <Link className="navbar-brand" to="/" >
                 <img src={logo} width="80" height="80" alt="" />
             </Link>
             <button className="navbar-toggler" type="button" style={{ margin: '0.4rem 2rem' }} onClick={handleSidebarToggle} aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
                 <span className="navbar-toggler-icon"></span>
             </button>
-            <div style={{ backgroundColor: '#141a24' }} className={`offcanvas offcanvas-end${showSidebar ? ' show' : ''}`} tabIndex="-1" id="sidebar">
+            <div className={`offcanvas offcanvas-end${showSidebar ? ' show' : ''}`} tabIndex="-1" id="sidebar">
                 <div className="offcanvas-header">
                     <button type="button" className="btn-close text-reset" onClick={handleSidebarToggle}></button>
                 </div>
@@ -83,22 +108,27 @@ function Navbar() {
                                     className="nav-item"
                                     key={page.name}
                                 >
-                                    <Link className="nav-link link-with-underline" style={linkStyle} to={page.path} onClick={handleSidebarToggle}>
+                                    <Link className="nav-link link-with-underline" style={linkStyle} to={page.path}
+                                        onClick={handleSidebarToggle}>
                                         {page.name}
-                                    </Link>        
+                                    </Link>
                                 </motion.li>
                             )
                         ))}
                         {data.username && (
                             <motion.li whileHover={{ scale: 1.2 }}
                                 whileTap={{ scale: 0.9 }} className="nav-item">
-                                <Link className="nav-link link-with-underline" onClick={() => logout()} style={linkStyle} to="/">Logout</Link>
+                                <Link className="nav-link link-with-underline" onClick={() => logout()}
+                                    style={linkStyle} to="/">Logout</Link>
                             </motion.li>
                         )}
+                        <ToggleButton onClick={toggleTheme}>
+                            {theme.theme === 'dark' ? <FaMoon /> : <FaSun />}
+                        </ToggleButton>
                     </ul>
                 </div>
             </div>
-        </nav>
+        </NavbarWrapper>
     );
 }
 

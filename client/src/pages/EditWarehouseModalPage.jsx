@@ -20,16 +20,27 @@ const StyledWrapper = styled.div`
     justify-content: flex-start;
     width: 100%;
 
-    button {
-        color: #fff;
+    .btn {
+        //margin: 2rem;
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 0 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: ${props => props.theme.buttonTextColor};
         border-radius: 0.5rem;
-        font-size: 1rem;
-        letter-spacing: 1px;
-        font-weight: bold;
-        cursor: ${props => props.disabled ? '' : 'pointer'};
-        background-image: linear-gradient(${props => props.disabled ? '#d3d3d3' : '#5c5c5c'}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-right: 8px;
+    }
+
+    .btn:hover {
+        background-position: right center; /* change the direction of the change here */
+    }
+
+    .btn-1 {
+        background-image: linear-gradient(to right, ${props => props.theme.buttonBackground} 30%, ${props => props.theme.textColor} 50%, ${props => props.theme.buttonBackground} 100%);
     }
 `;
 
@@ -46,14 +57,12 @@ const EditWarehouseModalPage = ({
     return (
         <>
             <StyledWrapper>
-                <motion.button
-                    whileHover={{scale: 1.1}}
-                    whileTap={{scale: 0.9}}
+                <button className={'btn btn-1'}
                     onClick={handleOpen}
                     style={{margin: '20px'}}
                 >
                     Edit configuration
-                </motion.button>
+                </button>
                 <Modal
                     open={open}
                     onClose={handleClose}

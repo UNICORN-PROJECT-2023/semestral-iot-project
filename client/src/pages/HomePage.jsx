@@ -8,7 +8,7 @@ const StyledWrapper = styled.div`
     justify-content: center;
     min-height: 100svh;
     border-radius: 1rem;
-    background-image: black;
+    background-color: ${props => props.theme.backgroundColor};
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -23,13 +23,14 @@ const StyledWrapper = styled.div`
     h1 {
         font-size: 4rem;
         margin-bottom: 1rem;
+        color: ${props => props.theme.textColor};
         @media (max-width: 768px) {
             font-size: 3.3rem;
         }
     }
 
     p {
-        color: rgb(235, 222, 222);
+        color: ${props => props.theme.textColor};
         font-weight: 700;
         font-size: 2rem;
         @media (max-width: 768px) {
@@ -38,7 +39,7 @@ const StyledWrapper = styled.div`
     }
 
     span {
-        background: -webkit-linear-gradient(#5c5c5c, #dddddd, #5c5c5c);
+        background: -webkit-linear-gradient(${props => props.theme.buttonBackground}, ${props => props.theme.textColor}, ${props => props.theme.buttonBackground});
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -52,7 +53,7 @@ const StyledWrapper = styled.div`
         text-transform: uppercase;
         transition: 0.5s;
         background-size: 200% auto;
-        color: white;
+        color: ${props => props.theme.buttonTextColor};
         border-radius: 0.5rem;
         font-weight: 700;
         letter-spacing: 2px;
@@ -63,7 +64,7 @@ const StyledWrapper = styled.div`
     }
 
     .btn-1 {
-        background-image: linear-gradient(to right, #5c5c5c 0%, #dddddd 50%, #5c5c5c 100%);
+        background-image: linear-gradient(to right, ${props => props.theme.buttonBackground} 30%, ${props => props.theme.textColor} 50%, ${props => props.theme.buttonBackground} 100%);
     }
 `;
 
