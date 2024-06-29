@@ -53,7 +53,7 @@ const CreateWarehouseModalPage = (props) => {
         <>
             <StyledWrapper>
                 <button className={"btn btn-1"} onClick={props.onOpen}>
-                    Create Warehouse
+                    Add Warehouse
                 </button>
             </StyledWrapper>
             <Modal
