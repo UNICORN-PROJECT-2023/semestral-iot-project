@@ -10,7 +10,7 @@ import './App.css';
 import WarehouseDetailScreen from "./screens/WarehouseDetailScreen";
 import { ThemeProvider } from 'styled-components';
 import { lightTheme, darkTheme } from './theme';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -22,11 +22,19 @@ const AppWrapper = styled.div`
 `;
 
 function App() {
-    const [isDarkMode, setIsDarkMode] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        // Retrieve the theme preference from localStorage
+        const savedTheme = localStorage.getItem('isDarkMode');
+        return savedTheme ? JSON.parse(savedTheme) : true; // Default to dark mode if no preference is found
+    });
+
     const theme = isDarkMode ? darkTheme : lightTheme;
 
     const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
+        const newTheme = !isDarkMode;
+        setIsDarkMode(newTheme);
+        // Save the theme preference to localStorage
+        localStorage.setItem('isDarkMode', JSON.stringify(newTheme));
     };
 
     function isLoggedIn() {
