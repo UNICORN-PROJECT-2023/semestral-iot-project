@@ -1,9 +1,11 @@
 import React from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import styled from "styled-components";
+import { Container, Typography, Table, TableBody, TableCell, TableHead, TableRow, Box, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import styled, { useTheme } from 'styled-components';
 import EditWarehouseModalScreen from "../screens/EditWarehouseModalScreen";
 import Graph from "../components/Graph";
-import { motion } from "framer-motion";
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -17,7 +19,6 @@ const StyledWrapper = styled.div`
     color: ${props => props.theme.textColor};
 
     .btn {
-        //margin: 2rem;
         border: none;
         padding: 0 1rem;
         text-align: center;
@@ -44,14 +45,62 @@ const StyledWrapper = styled.div`
     }
 `;
 
-const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, handleUpdate, apiService, warehouseId }) => {
+const ThemedTextField = styled(TextField)`
+    & .MuiInputBase-input {
+        color: ${props => props.theme.textColor};
+    }
+    & .MuiInputLabel-root {
+        color: ${props => props.theme.textColor};
+    }
+    & .MuiOutlinedInput-root {
+        & fieldset {
+            border-color: ${props => props.theme.textColor};
+        }
+        &:hover fieldset {
+            border-color: ${props => props.theme.textColor};
+        }
+        &.Mui-focused fieldset {
+            border-color: ${props => props.theme.textColor};
+        }
+    }
+    & .MuiSvgIcon-root {
+        color: ${props => props.theme.textColor};
+    }
+`;
+
+const ThemedSelect = styled(Select)`
+    & .MuiInputBase-input {
+        color: ${props => props.theme.textColor};
+    }
+    & .MuiInputLabel-root {
+        color: ${props => props.theme.textColor};
+    }
+    & .MuiOutlinedInput-root {
+        & fieldset {
+            border-color: ${props => props.theme.textColor};
+        }
+        &:hover fieldset {
+            border-color: ${props => props.theme.textColor};
+        }
+        &.Mui-focused fieldset {
+            border-color: ${props => props.theme.textColor};
+        }
+    }
+    & .MuiSvgIcon-root {
+        color: ${props => props.theme.textColor};
+    }
+`;
+
+const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, handleUpdate, apiService, warehouseId, dateFrom, setDateFrom, dateTo, setDateTo, interval, setInterval }) => {
+    const theme = useTheme();
+
     return (
         <StyledWrapper>
             <Container>
                 {warehouse && (
                     <>
                         <Typography variant="h4" sx={{ mb: 2 }}>
-                            Warehouse-{warehouse.id}
+                            {warehouse.name}
                         </Typography>
                         <Typography variant="body1" sx={{ mb: 1 }}>
                             Min Temperature: {warehouse.temperatureMin}°C
@@ -67,6 +116,7 @@ const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, han
                                 apiService={apiService}
                                 warehouseId={warehouseId}
                                 initialData={{
+                                    name: warehouse.name,
                                     minTemperature: warehouse.temperatureMin,
                                     maxTemperature: warehouse.temperatureMax,
                                     alertDuration: warehouse.allertMinDuration
@@ -74,14 +124,49 @@ const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, han
                                 onUpdated={handleUpdate}
                             />
                             <button className={'btn btn-1'}
-                                           onClick={toggleViewMode}
-                                           style={{margin: '20px'}}
+                                onClick={toggleViewMode}
+                                style={{ margin: '20px' }}
                             >
                                 {viewMode === 'table' ? 'Show Graph' : 'Show Table'}
                             </button>
                         </div>
                     </>
                 )}
+                <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+                    <DatePicker
+                        label="Date From"
+                        value={dateFrom}
+                        onChange={(newValue) => setDateFrom(newValue)}
+                        renderInput={(params) => <ThemedTextField {...params} theme={theme} />}
+                        components={{
+                            OpenPickerIcon: () => <CalendarTodayIcon sx={{ color: theme.textColor }} />
+                        }}
+                    />
+                    <DatePicker
+                        label="Date To"
+                        value={dateTo}
+                        onChange={(newValue) => setDateTo(newValue)}
+                        renderInput={(params) => <ThemedTextField {...params} theme={theme} />}
+                        components={{
+                            OpenPickerIcon: () => <CalendarTodayIcon sx={{ color: theme.textColor }} />
+                        }}
+                    />
+                    <FormControl sx={{ minWidth: 120 }}>
+                        <InputLabel id="interval-label" sx={{ color: theme.textColor }}>Interval</InputLabel>
+                        <ThemedSelect
+                            labelId="interval-label"
+                            value={interval}
+                            onChange={(event) => setInterval(event.target.value)}
+                            label="Interval"
+                            theme={theme}
+                            IconComponent={() => <ArrowDropDownIcon sx={{ color: theme.textColor }} />}
+                        >
+                            <MenuItem value={1}>Minute</MenuItem>
+                            <MenuItem value={60}>Hour</MenuItem>
+                            <MenuItem value={1440}>Day</MenuItem>
+                        </ThemedSelect>
+                    </FormControl>
+                </Box>
                 {viewMode === 'table' ? (
                     <Table>
                         <TableHead>
@@ -91,8 +176,8 @@ const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, han
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {records.map((record) => (
-                                <TableRow key={record.id}>
+                            {records.map((record, index) => (
+                                <TableRow key={index}>
                                     <TableCell sx={{ color: 'inherit' }}>{new Date(record.date).toLocaleString()}</TableCell>
                                     <TableCell sx={{ color: 'inherit' }}>{record.temperature}</TableCell>
                                 </TableRow>

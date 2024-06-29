@@ -5,6 +5,7 @@ import EditWarehouseModalPage from '../pages/EditWarehouseModalPage'; // Present
 const EditWarehouseModalScreen = ({ apiService, warehouseId, initialData, onUpdated }) => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
+        name: initialData.name,
         minTemperature: initialData.minTemperature,
         maxTemperature: initialData.maxTemperature,
         alertDuration: initialData.alertDuration
@@ -20,7 +21,7 @@ const EditWarehouseModalScreen = ({ apiService, warehouseId, initialData, onUpda
     }
 
     const handleChange = (name, value) => {
-        setFormData(prev => ({ ...prev, [name]: parseFloat(value) || '' }));
+        setFormData(prev => ({ ...prev, [name]: name === 'name' ? value : parseFloat(value) || '' }));
     };
 
     const validateData = () => {

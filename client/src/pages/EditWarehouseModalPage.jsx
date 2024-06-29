@@ -1,7 +1,7 @@
 import React from 'react';
-import {Modal, Box, Typography, TextField, Stack, Snackbar, Alert} from '@mui/material';
-import {motion} from "framer-motion";
-import styled from "styled-components";
+import { Modal, Box, Typography, TextField, Stack, Snackbar, Alert } from '@mui/material';
+import { motion } from "framer-motion";
+import styled, { useTheme } from 'styled-components';
 
 const style = {
     position: 'absolute',
@@ -45,15 +45,16 @@ const StyledWrapper = styled.div`
 `;
 
 const EditWarehouseModalPage = ({
-                                    open,
-                                    handleOpen,
-                                    handleClose,
-                                    formData,
-                                    handleChange,
-                                    handleSubmit,
-                                    error,
-                                    setError
-                                }) => {
+    open,
+    handleOpen,
+    handleClose,
+    formData,
+    handleChange,
+    handleSubmit,
+    error,
+    setError
+}) => {
+    const theme = useTheme();
     return (
         <>
             <StyledWrapper>
@@ -69,11 +70,24 @@ const EditWarehouseModalPage = ({
                     aria-labelledby="modal-title"
                     aria-describedby="modal-description"
                 >
-                    <Box sx={style}>
+                    <Box sx={{ ...style, bgcolor: theme.inputBackgroundColor, color: theme.textColor }}>
                         <Typography id="modal-title" variant="h6" component="h2">
                             Edit Warehouse Details
                         </Typography>
                         <Stack spacing={2} sx={{mt: 2}}>
+                            <TextField
+                                label="Warehouse Name"
+                                variant="outlined"
+                                name="name"
+                                value={formData.name}
+                                onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                InputLabelProps={{
+                                    style: { color: theme.inputTextColor }
+                                }}
+                                InputProps={{
+                                    style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                                }}
+                            />
                             <TextField
                                 label="Minimum Temperature"
                                 variant="outlined"
@@ -81,6 +95,12 @@ const EditWarehouseModalPage = ({
                                 type="number"
                                 value={formData.minTemperature}
                                 onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                InputLabelProps={{
+                                    style: { color: theme.inputTextColor }
+                                }}
+                                InputProps={{
+                                    style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                                }}
                             />
                             <TextField
                                 label="Maximum Temperature"
@@ -89,6 +109,12 @@ const EditWarehouseModalPage = ({
                                 type="number"
                                 value={formData.maxTemperature}
                                 onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                InputLabelProps={{
+                                    style: { color: theme.inputTextColor }
+                                }}
+                                InputProps={{
+                                    style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                                }}
                             />
                             <TextField
                                 label="Alert Duration (minutes)"
@@ -97,6 +123,12 @@ const EditWarehouseModalPage = ({
                                 type="number"
                                 value={formData.alertDuration}
                                 onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                InputLabelProps={{
+                                    style: { color: theme.inputTextColor }
+                                }}
+                                InputProps={{
+                                    style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                                }}
                             />
                             <motion.button
                                 whileHover={{scale: 1.1}}
