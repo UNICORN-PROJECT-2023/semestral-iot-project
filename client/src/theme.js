@@ -10,6 +10,8 @@ export const lightTheme = {
     tableCellColor: "#000000",
     lineColor: "#21299f", // Add line color for graph
     activeDotColor: "#21299f", // Add active dot color for graph
+    inputBackgroundColor: "#ffffff",
+    inputTextColor: "#0D1117",
     theme: "light"
 };
 

@@ -109,7 +109,7 @@ const WarehousesPage = ({ warehouses, refreshWarehouses, apiService }) => {
                     <TableBody>
                         {warehouses.map((wh) => (
                             <TableRow key={wh.id}>
-                                <TableCell sx={{ color: 'inherit'}}>Warehouse-{wh.id}</TableCell>
+                                <TableCell sx={{ color: 'inherit'}}>{wh.name}</TableCell>
                                 <TableCell sx={{ color: 'inherit'}}>{wh.temperatureMin}</TableCell>
                                 <TableCell sx={{ color: 'inherit'}}>{wh.temperatureMax}</TableCell>
                                 <TableCell sx={{ color: 'inherit'}}>{wh.allertMinDuration}</TableCell>
