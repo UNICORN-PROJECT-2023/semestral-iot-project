@@ -22,7 +22,7 @@ const ToggleButton = styled.button`
     align-items: center;
     justify-content: center;
     padding: 0.5rem 1rem;
-    margin: 20px;
+    margin: 15px;
     color: ${props => props.theme.buttonTextColor};
     font-size: 1.2rem;
     transition: background 0.3s ease;
@@ -89,7 +89,7 @@ function Navbar({ toggleTheme }) {
     return (
         <NavbarWrapper className="navbar fixed-top navbar-expand-lg navbar-dark">
             <Link className="navbar-brand" to="/" >
-                <img src={logo} width="80" height="80" alt="" />
+                <img src={logo} width="70" height="70" alt="" />
             </Link>
             <button className="navbar-toggler" type="button" style={{ margin: '0.4rem 2rem' }} onClick={handleSidebarToggle} aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
                 <span className="navbar-toggler-icon"></span>

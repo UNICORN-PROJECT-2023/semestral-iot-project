@@ -93,6 +93,12 @@ const ThemedSelect = styled(Select)`
     }
 `;
 
+const ThemedPagination = styled(Pagination)`
+    & .MuiPaginationItem-root {
+        color: ${props => props.theme.textColor};
+    }
+`;
+
 const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode, handleUpdate, apiService, warehouseId, dateFrom, setDateFrom, dateTo, setDateTo, interval, setInterval, entriesPerPage, setEntriesPerPage, currentPage, setCurrentPage, totalRecords }) => {
     const theme = useTheme();
 
@@ -215,22 +221,38 @@ const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode
                             disabled={currentPage === 1}
                             sx={{ color: theme.textColor }}
                         >
-                            <ArrowBackIcon />
                         </IconButton>
-                        <Pagination
+                        <ThemedPagination
                             count={Math.ceil(totalRecords / entriesPerPage)}
                             page={currentPage}
                             onChange={handlePageChange}
                             color="primary"
                             siblingCount={0}
                             boundaryCount={2}
+                            sx={{
+                                '& .MuiPaginationItem-root': {
+                                    color: theme.textColor,
+                                },
+                                '& .MuiPaginationItem-page.Mui-selected': {
+                                    backgroundColor: theme.textColor,
+                                    color: theme.backgroundColor,
+                                },
+                                '& .MuiPaginationItem-ellipsis': {
+                                    color: theme.textColor,
+                                },
+                                '& .MuiPaginationItem-page': {
+                                    '&:hover': {
+                                        backgroundColor: theme.textColor,
+                                        color: theme.backgroundColor,
+                                    },
+                                },
+                            }}
                         />
                         <IconButton
                             onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(totalRecords / entriesPerPage)))}
                             disabled={currentPage === Math.ceil(totalRecords / entriesPerPage)}
                             sx={{ color: theme.textColor }}
                         >
-                            <ArrowForwardIcon />
                         </IconButton>
                     </Box>
                 )}

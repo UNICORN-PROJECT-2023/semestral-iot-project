@@ -37,6 +37,11 @@ function App() {
         localStorage.setItem('isDarkMode', JSON.stringify(newTheme));
     };
 
+    useEffect(() => {
+        // Update the body background color based on the theme
+        document.body.style.backgroundColor = theme.backgroundColor;
+    }, [theme]);
+
     function isLoggedIn() {
         return localStorage.getItem('token') ? true : false;
     }
