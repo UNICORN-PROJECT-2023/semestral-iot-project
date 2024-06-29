@@ -12,11 +12,13 @@ import { GuardModule } from '../guard/guard.module';
 // import { ArticleListController } from './controllers/article-list.controller';
 import { WerehouseController } from './controllers/werehouse.controller';
 import { WerehouseService } from './services/werehouse.service';
+import { CronModule } from '../cron/cron.module';
 
 @Module({
   imports: [
     DatabaseModule,
-    GuardModule
+    GuardModule,
+    CronModule,
   ],
   controllers: [UserController, WerehouseController],
   providers: [UserService, PasswordService, WerehouseService],

@@ -64,11 +64,6 @@ export class WarehouseLogsDao {
       [warehouseId, from.toISOString(), to.toISOString(), length, offset, interval]
     );
 
-    console.log(from.toISOString());
-    console.log(to.toISOString());
-    console.log(length);
-    console.log(offset);
-
     return result.map(row => 
       new WarehouseLogsEntity(
         new Date(row.interval),

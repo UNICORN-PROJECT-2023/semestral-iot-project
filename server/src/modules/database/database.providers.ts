@@ -3,9 +3,10 @@ import { CustomerWarehouseEntity } from './entity/customer-warehouse.entity';
 import { CustomerEntity } from './entity/customer.entity';
 import { WarehouseEntity } from './entity/warehouse.entity';
 import { WarehouseLogsEntity } from './entity/warehouse-logs.entity';
+import { WarehouseReportEntity } from './entity/warehouse-report.entity';
 
 // List of entities
-const entities = [CustomerEntity, CustomerWarehouseEntity, WarehouseEntity, WarehouseLogsEntity];
+const entities = [CustomerEntity, CustomerWarehouseEntity, WarehouseEntity, WarehouseLogsEntity, WarehouseReportEntity];
 
 export const Provider = [
   TypeOrmModule.forRoot({

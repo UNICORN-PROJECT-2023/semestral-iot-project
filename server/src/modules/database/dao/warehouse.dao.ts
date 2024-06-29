@@ -35,6 +35,15 @@ export class WarehouseDao {
     });
   }
 
+  async findAll(): Promise<WarehouseEntity[]> {
+    return await this.warehouseRepository.find({
+      relations: [
+        "customerWarehouseEntity",  
+        "customerWarehouseEntity.customerEntity"
+      ]
+    });
+  }
+
 
   async findById(id: number): Promise<WarehouseEntity> {
     const tempArticleEntity = await this.warehouseRepository.find({

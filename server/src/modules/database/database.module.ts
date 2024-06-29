@@ -4,6 +4,7 @@ import { CustomerDao } from './dao/customer.dao';
 import { WarehouseDao } from './dao/warehouse.dao'; 
 import { CustomerWarehouseDao } from './dao/customer-warehouse.dao'; 
 import { WarehouseLogsDao } from './dao/warehouseLogs.dao';
+import { WarehouseReportDao } from './dao/warehouse-report.dao';
 
 @Module({
   imports: [
@@ -14,12 +15,14 @@ import { WarehouseLogsDao } from './dao/warehouseLogs.dao';
     WarehouseDao,
     CustomerWarehouseDao,
     WarehouseLogsDao,
+    WarehouseReportDao,
   ],
   exports: [
     CustomerDao,
     WarehouseDao,
     CustomerWarehouseDao,
     WarehouseLogsDao,
+    WarehouseReportDao,
   ],
 })
 export class DatabaseModule {}
