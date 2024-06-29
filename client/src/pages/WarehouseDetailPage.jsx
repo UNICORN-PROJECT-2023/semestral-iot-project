@@ -1,11 +1,13 @@
 import React from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableHead, TableRow, Box, TextField, MenuItem, Select, FormControl, InputLabel, Pagination } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableHead, TableRow, Box, TextField, MenuItem, Select, FormControl, InputLabel, Pagination, IconButton } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import styled, { useTheme } from 'styled-components';
 import EditWarehouseModalScreen from "../screens/EditWarehouseModalScreen";
 import Graph from "../components/Graph";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -183,6 +185,7 @@ const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode
                             <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={25}>25</MenuItem>
                             <MenuItem value={50}>50</MenuItem>
+                            <MenuItem value={99999}>All</MenuItem>
                         </ThemedSelect>
                     </FormControl>
                 </Box>
@@ -204,16 +207,32 @@ const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode
                         </TableBody>
                     </Table>
                 ) : (
-                    <Graph records={records} minTemperature={warehouse.temperatureMin} maxTemperature={warehouse.temperatureMax} />
+                    <Graph records={records.slice().reverse()} minTemperature={warehouse.temperatureMin} maxTemperature={warehouse.temperatureMax} />
                 )}
                 {totalRecords > entriesPerPage && (
-                    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <IconButton
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                            sx={{ color: theme.textColor }}
+                        >
+                            <ArrowBackIcon />
+                        </IconButton>
                         <Pagination
                             count={Math.ceil(totalRecords / entriesPerPage)}
                             page={currentPage}
                             onChange={handlePageChange}
                             color="primary"
+                            siblingCount={0}
+                            boundaryCount={2}
                         />
+                        <IconButton
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(totalRecords / entriesPerPage)))}
+                            disabled={currentPage === Math.ceil(totalRecords / entriesPerPage)}
+                            sx={{ color: theme.textColor }}
+                        >
+                            <ArrowForwardIcon />
+                        </IconButton>
                     </Box>
                 )}
             </Container>

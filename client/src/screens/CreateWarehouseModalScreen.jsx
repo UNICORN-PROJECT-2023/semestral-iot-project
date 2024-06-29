@@ -30,6 +30,7 @@ const CreateWarehouseModalScreen = ({ apiService, refreshWarehouses }) => {
         if (validateData(formData)) {
             const dataToSubmit = {
                 iotId: formData.iotId,
+                name: formData.name,
                 minTemperature: parseFloat(formData.minTemperature), // Convert to float
                 maxTemperature: parseFloat(formData.maxTemperature), // Convert to float
                 alertDuration: parseInt(formData.alertDuration, 10) // Convert to integer

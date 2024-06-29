@@ -11,7 +11,7 @@ const WarehouseDetailScreen = () => {
     const [warehouse, setWarehouse] = useState(null);
     const [viewMode, setViewMode] = useState('table'); // Default view mode
     const [dateFrom, setDateFrom] = useState(new Date().setMonth(new Date().getMonth() - 4));
-    const [dateTo, setDateTo] = useState(new Date());
+    const [dateTo, setDateTo] = useState(new Date().setDate(new Date().getDate() + 1));
     const [interval, setInterval] = useState(1); // Default interval to 1 minute
     const [entriesPerPage, setEntriesPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +44,15 @@ const WarehouseDetailScreen = () => {
             const response = await apiService.get(`/warehouse/${warehouseId}/record?${queryParams.toString()}`);
             const json = await response.json();
             setRecords(json.body || []);
-            setTotalRecords(json.body.count() || 0);
+            const queryParams2 = new URLSearchParams();
+            if (dateFrom) queryParams2.append('from', format(dateFrom, 'yyyy-MM-dd'));
+            if (dateTo) queryParams2.append('to', format(dateTo, 'yyyy-MM-dd'));
+            queryParams2.append('offset', 0);
+            queryParams2.append('length', 99999999);
+            queryParams2.append('interval', interval);
+            const responseAll = await apiService.get(`/warehouse/${warehouseId}/record?${queryParams2.toString()}`);
+            const jsonAll = await responseAll.json();
+            setTotalRecords(jsonAll.body.length || 0);  // Ensure this correctly reflects the number of records
         } catch (error) {
             console.error('Error fetching records:', error);
         }
