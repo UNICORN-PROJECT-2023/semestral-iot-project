@@ -1,28 +1,39 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Stack } from '@mui/material';
 import { motion } from "framer-motion";
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const StyledWrapper = styled.div`
     display: flex;
     justify-content: center; // Aligns children (button) to the right
     width: 100%; // Ensures the wrapper takes full width of its container
     margin-bottom: 20px; // Adds some spacing below the button
-
-    button {
-        color: #fff;
+    
+    .btn {
+        margin: 2rem;
         border: none;
-        padding: 1rem 2rem;
+        padding: 1rem 3.5rem;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: ${props => props.theme.buttonTextColor};
         border-radius: 0.5rem;
-        font-size: 1rem;
-        letter-spacing: 1px;
-        font-weight: bold;
-        cursor: ${props => props.disabled ? '' : 'pointer'};
-        background-image: linear-gradient(${props => props.disabled ? '#d3d3d3' : '#5c5c5c'}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+    .btn:hover {
+        background-position: right center; /* change the direction of the change here */
+    }
+
+    .btn-1 {
+        background-image: linear-gradient(to right, ${props => props.theme.buttonBackground} 30%, ${props => props.theme.textColor} 50%, ${props => props.theme.buttonBackground} 100%);
     }
 `;
 
 const CreateWarehouseModalPage = (props) => {
+    const theme = useTheme();
     const [formData, setFormData] = useState({
         iotId: '',
         minTemperature: '',
@@ -41,13 +52,9 @@ const CreateWarehouseModalPage = (props) => {
     return (
         <>
             <StyledWrapper>
-                <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={props.onOpen}
-                >
+                <button className={"btn btn-1"} onClick={props.onOpen}>
                     Create Warehouse
-                </motion.button>
+                </button>
             </StyledWrapper>
             <Modal
                 open={props.open}
@@ -66,6 +73,12 @@ const CreateWarehouseModalPage = (props) => {
                             name="iotId"
                             value={formData.iotId}
                             onChange={handleChange}
+                            InputLabelProps={{
+                                style: { color: theme.inputTextColor }
+                            }}
+                            InputProps={{
+                                style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                            }}
                         />
                         <TextField
                             type="number"
@@ -74,6 +87,12 @@ const CreateWarehouseModalPage = (props) => {
                             name="minTemperature"
                             value={formData.minTemperature}
                             onChange={handleChange}
+                            InputLabelProps={{
+                                style: { color: theme.inputTextColor }
+                            }}
+                            InputProps={{
+                                style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                            }}
                         />
                         <TextField
                             type="number"
@@ -82,6 +101,12 @@ const CreateWarehouseModalPage = (props) => {
                             name="maxTemperature"
                             value={formData.maxTemperature}
                             onChange={handleChange}
+                            InputLabelProps={{
+                                style: { color: theme.inputTextColor }
+                            }}
+                            InputProps={{
+                                style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                            }}
                         />
                         <TextField
                             type="number"
@@ -90,6 +115,12 @@ const CreateWarehouseModalPage = (props) => {
                             name="alertDuration"
                             value={formData.alertDuration}
                             onChange={handleChange}
+                            InputLabelProps={{
+                                style: { color: theme.inputTextColor }
+                            }}
+                            InputProps={{
+                                style: { color: theme.inputTextColor, backgroundColor: theme.inputBackgroundColor }
+                            }}
                         />
                         <motion.button
                             whileHover={{ scale: 1.1 }}

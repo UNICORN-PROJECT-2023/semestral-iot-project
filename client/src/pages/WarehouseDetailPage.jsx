@@ -12,27 +12,37 @@ const StyledWrapper = styled.div`
     justify-content: center;
     min-height: calc(100vh - 60px);
     padding-top: 100px;
-    background-color: #0D1117;
+    background-color: ${props => props.theme.backgroundColor};
     margin-bottom: 20px;
-    
+    color: ${props => props.theme.textColor};
 
-    button {
-        color: #fff;
+    .btn {
+        //margin: 2rem;
         border: none;
-        padding: 0.1rem 1rem;
+        padding: 0 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: ${props => props.theme.buttonTextColor};
         border-radius: 0.5rem;
-        font-size: 1rem;
-        letter-spacing: 1px;
-        font-weight: bold;
-        cursor: ${props => props.disabled ? '' : 'pointer'};
-        background-image: linear-gradient(${props => props.disabled ? '#d3d3d3' : '#5c5c5c'}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-right: 8px;
+    }
+
+    .btn:hover {
+        background-position: right center; /* change the direction of the change here */
+    }
+
+    .btn-1 {
+        background-image: linear-gradient(to right, ${props => props.theme.buttonBackground} 30%, ${props => props.theme.textColor} 50%, ${props => props.theme.buttonBackground} 100%);
     }
 
     @media (max-width: 768px) {
         padding: 60px 2rem 0;
     }
 `;
-
 
 const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, handleUpdate, apiService, warehouseId }) => {
     return (
@@ -63,13 +73,12 @@ const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, han
                                 }}
                                 onUpdated={handleUpdate}
                             />
-                            <motion.button whileHover={{ scale: 1.1 }}
-                                           whileTap={{ scale: 0.9 }}
+                            <button className={'btn btn-1'}
                                            onClick={toggleViewMode}
                                            style={{margin: '20px'}}
                             >
                                 {viewMode === 'table' ? 'Show Graph' : 'Show Table'}
-                            </motion.button>
+                            </button>
                         </div>
                     </>
                 )}
@@ -77,15 +86,15 @@ const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, han
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Date</TableCell>
-                                <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.1rem' }}>Temperature (°C)</TableCell>
+                                <TableCell sx={{ color: 'inherit', fontWeight: 'bold', fontSize: '1.1rem' }}>Date</TableCell>
+                                <TableCell sx={{ color: 'inherit', fontWeight: 'bold', fontSize: '1.1rem' }}>Temperature (°C)</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {records.map((record) => (
                                 <TableRow key={record.id}>
-                                    <TableCell sx={{ color: 'white' }}>{new Date(record.date).toLocaleString()}</TableCell>
-                                    <TableCell sx={{ color: 'white' }}>{record.temperature}</TableCell>
+                                    <TableCell sx={{ color: 'inherit' }}>{new Date(record.date).toLocaleString()}</TableCell>
+                                    <TableCell sx={{ color: 'inherit' }}>{record.temperature}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

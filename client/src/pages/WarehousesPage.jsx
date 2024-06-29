@@ -13,18 +13,42 @@ const StyledWrapper = styled.div`
     justify-content: center;
     min-height: calc(100vh - 60px);
     padding-top: 60px;
-    background-color: #0D1117;
+    background-color: ${props => props.theme.backgroundColor};
+    color: ${props => props.theme.textColor};
 
-    button {
-        color: #fff;
+    // button {
+    //     color: ${props => props.theme.buttonTextColor};
+    //     border: none;
+    //     padding: 0.5rem 1rem;
+    //     border-radius: 0.5rem;
+    //     font-size: 1rem;
+    //     letter-spacing: 1px;
+    //     font-weight: bold;
+    //     cursor: ${props => props.disabled ? '' : 'pointer'};
+    //     background-image: linear-gradient(${props => props.disabled ? props.theme.buttonBackgroundDisabled : props.theme.buttonBackground}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
+    // }
+    
+    .btn {
+        //margin: 2rem;
         border: none;
         padding: 0.5rem 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: ${props => props.theme.buttonTextColor};
         border-radius: 0.5rem;
-        font-size: 1rem;
-        letter-spacing: 1px;
-        font-weight: bold;
-        cursor: ${props => props.disabled ? '' : 'pointer'};
-        background-image: linear-gradient(${props => props.disabled ? '#d3d3d3' : '#5c5c5c'}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-right: 8px;
+    }
+
+    .btn:hover {
+        background-position: right center; /* change the direction of the change here */
+    }
+
+    .btn-1 {
+        background-image: linear-gradient(to right, ${props => props.theme.buttonBackground} 30%, ${props => props.theme.textColor} 50%, ${props => props.theme.buttonBackground} 100%);
     }
 
     @media (max-width: 768px) {
@@ -75,30 +99,35 @@ const WarehousesPage = ({ warehouses, refreshWarehouses, apiService }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ color: 'white'}}>Name</TableCell>
-                            <TableCell sx={{ color: 'white'}}>Min Temperature (°C)</TableCell>
-                            <TableCell sx={{ color: 'white'}}>Max Temperature (°C)</TableCell>
-                            <TableCell sx={{ color: 'white'}}>Alert Duration (min)</TableCell>
-                            <TableCell sx={{ color: 'white'}}>Actions</TableCell>
+                            <TableCell sx={{ color: 'inherit'}}>Name</TableCell>
+                            <TableCell sx={{ color: 'inherit'}}>Min Temperature (°C)</TableCell>
+                            <TableCell sx={{ color: 'inherit'}}>Max Temperature (°C)</TableCell>
+                            <TableCell sx={{ color: 'inherit'}}>Alert Duration (min)</TableCell>
+                            <TableCell sx={{ color: 'inherit'}}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {warehouses.map((wh) => (
                             <TableRow key={wh.id}>
-                                <TableCell sx={{ color: 'white'}}>Warehouse-{wh.id}</TableCell>
-                                <TableCell sx={{ color: 'white'}}>{wh.temperatureMin}</TableCell>
-                                <TableCell sx={{ color: 'white'}}>{wh.temperatureMax}</TableCell>
-                                <TableCell sx={{ color: 'white'}}>{wh.allertMinDuration}</TableCell>
-                                <TableCell sx={{ color: 'white'}}>
+                                <TableCell sx={{ color: 'inherit'}}>Warehouse-{wh.id}</TableCell>
+                                <TableCell sx={{ color: 'inherit'}}>{wh.temperatureMin}</TableCell>
+                                <TableCell sx={{ color: 'inherit'}}>{wh.temperatureMax}</TableCell>
+                                <TableCell sx={{ color: 'inherit'}}>{wh.allertMinDuration}</TableCell>
+                                <TableCell sx={{ color: 'inherit'}}>
                                     <ButtonWrapper>
                                         <Link to={`/warehouses/${wh.id}`} style={{ textDecoration: 'none' }}>
-                                            <motion.button className="detail-button" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                            <button className="btn-1 btn"
+                                                    // whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                                                >
                                                 Detail
-                                            </motion.button>
+                                            </button>
                                         </Link>
-                                        <motion.button className="delete-button" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => handleDeleteClick(wh)} aria-label="delete" sx={{ color: 'white' }}>
+                                        <button className="btn btn-1"
+                                                       // whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                                                       onClick={() => handleDeleteClick(wh)} aria-label="delete" sx={{ color: 'inherit' }}
+                                        >
                                             <DeleteIcon />
-                                        </motion.button>
+                                        </button>
                                     </ButtonWrapper>
                                 </TableCell>
                             </TableRow>
