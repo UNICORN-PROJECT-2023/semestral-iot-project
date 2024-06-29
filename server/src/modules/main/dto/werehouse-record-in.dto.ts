@@ -25,7 +25,7 @@ export class WerehouseRecordBathInDto {
   @Type(() => WerehouseRecordInDto)
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
-  @ArrayMaxSize(12)
+  @ArrayMaxSize(1000)
   @ApiProperty({ required: true, type: [WerehouseRecordInDto] })
   values: WerehouseRecordInDto[];
 

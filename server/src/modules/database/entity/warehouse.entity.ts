@@ -7,6 +7,9 @@ export class WarehouseEntity {
   @PrimaryGeneratedColumn({ name: 'w_id' })
   id: number;
 
+  @Column({ name: 'w_name', default: ""})
+  name: string;
+
   @Column({ name: 'w_warehouse_id' })
   warehouseId: string;
 
@@ -42,12 +45,14 @@ export class WarehouseEntity {
   
   constructor(
     warehouseId: string,
+    werehouseName: string,
     password: string,
     temperatureMin: number,
     temperatureMax: number,
     allertMinDuration: number,
   ) {
     this.warehouseId = warehouseId;
+    this.name = werehouseName;
     this.password = password;
     this.temperatureMin = temperatureMin;
     this.temperatureMax = temperatureMax;

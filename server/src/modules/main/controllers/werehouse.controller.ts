@@ -55,6 +55,23 @@ export class WerehouseController {
     return response;
   }
 
+
+  @Get("/:warehouseId")
+  @Roles("user")
+  @ApiTags('user')
+  @ApiParam({ name: 'warehouseId', type: Number })
+  async getWerehouse(@Req() req: any, @Param('warehouseId') warehouseId: number): Promise<ResponseDto<WarehouseEntity>> {
+    const warehouseEntity: WarehouseEntity = await this.werehouseService.getWarehouse(warehouseId, req.user.id);
+  
+    const response = new ResponseDtoBuilder<WarehouseEntity>()
+    .setStatusCode(200)
+    .setMessage("Get werehouse")
+    .setBody(warehouseEntity)
+    .build();
+  
+    return response;
+  }
+
   @Put("/:warehouseId")
   @Roles("user")
   @ApiTags('user')
@@ -72,8 +89,8 @@ export class WerehouseController {
   }
 
   @Delete("/:warehouseId")
-  @Roles("user")
-  @ApiTags('user')
+  @Roles("user", "iot")
+  @ApiTags("user", "iot")
   @ApiParam({ name: 'warehouseId', type: Number })
   async deleteWerehouse(@Req() req: any, @Param('warehouseId') warehouseId: number): Promise<ResponseDto<void>> {
     await this.werehouseService.deleteWarehouse(warehouseId, req.user.id);
@@ -93,15 +110,21 @@ export class WerehouseController {
   @ApiParam({ name: 'warehouseId', type: Number })
   @ApiQuery({ name: 'length', type: Number })
   @ApiQuery({ name: 'offset', type: Number })
+  @ApiQuery({ name: 'from', type: Date })
+  @ApiQuery({ name: 'to', type: Date })
+  @ApiQuery({ name: 'interval', type: Number })
   async getData( 
     @Req() req: any, 
     @Param('warehouseId') warehouseId: number,
     @Query('length') length: number,
-    @Query('offset') offset: number
+    @Query('offset') offset: number,
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+    @Query('interval') interval: number,
     ): Promise<ResponseDto<Array<WarehouseLogsEntity>>> {
     const cstId = req.user.id;
     
-    const warehouseLogs: Array<WarehouseLogsEntity> = await this.werehouseService.getWarehouseLogs(warehouseId, cstId, length, offset);
+    const warehouseLogs: Array<WarehouseLogsEntity> = await this.werehouseService.getWarehouseLogs(warehouseId, cstId, length, offset, from, to, interval);
     
     const response = new ResponseDtoBuilder<Array<WarehouseLogsEntity>>()
       .setStatusCode(200)

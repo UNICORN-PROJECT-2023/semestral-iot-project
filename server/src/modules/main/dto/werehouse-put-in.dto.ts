@@ -5,6 +5,12 @@ import { UserType } from "../type/user-type";
 export class WerehousePutInDto {
 
   @IsOptional()
+  @MinLength(3)
+  @MaxLength(30)
+  @ApiProperty({required: true})
+  name: string;
+
+  @IsOptional()
   @IsNumber()
   @ApiProperty({required: true})
   minTemperature: number; 
@@ -20,7 +26,8 @@ export class WerehousePutInDto {
   alertDuration: number;
 
 
-  constructor(minTemperature: number, maxTemperature: number, alertDuration: number) {
+  constructor(name: string, minTemperature: number, maxTemperature: number, alertDuration: number) {
+    this.name = name;
     this.minTemperature = minTemperature;
     this.maxTemperature = maxTemperature;
     this.alertDuration = alertDuration;

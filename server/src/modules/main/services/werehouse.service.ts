@@ -67,20 +67,22 @@ export class WerehouseService {
       throw new ForbiddenException("Wrong secret key");
     }
 
+    let werehouseEntity;
     try {
-      const werehouseEntity = await this.warehouseDao.findByWarehouseId(werehouseInDto.id);
-
-      if(werehouseEntity) {
-        throw new BadRequestException("Warehouse already exists");
-      }
+      werehouseEntity = await this.warehouseDao.findByWarehouseId(werehouseInDto.id);
     } catch(e) {
       console.log("Warehouse not found");
+    }
+
+    if(werehouseEntity) {
+      throw new BadRequestException("Warehouse already exists");
     }
 
     werehouseInDto.password = await this.passwordService.hashPassword(werehouseInDto.password);
 
     const warehouseEntity: WarehouseEntity = new WarehouseEntity(
       werehouseInDto.id, 
+      "",
       werehouseInDto.password,
       -100,
       100,
@@ -114,11 +116,22 @@ export class WerehouseService {
 
     /** CUSTOMER FUNCTIONS */
 
+    async getWarehouse(warehouseId: number, userId: number): Promise<WarehouseEntity> {
+      const warehouseEntity = await this.warehouseDao.findById(warehouseId);
+
+      if(!warehouseEntity.customerWarehouseEntity.find((customer) => customer.customerEntity.id == userId)) {
+        throw new ForbiddenException("You are not the owner of this warehouse");
+      }
+
+      return warehouseEntity;
+    }
+
     async addNewWarehouse(warehouseInDto: WerehouseInDto, userId: number,): Promise<WarehouseEntity> {
       await this.customerWarehouseDao.add(warehouseInDto.iotId, userId);
 
       const warehouseEntity = await this.warehouseDao.findByWarehouseId(warehouseInDto.iotId);
 
+      warehouseEntity.name = warehouseInDto.name;
       warehouseEntity.allertMinDuration = warehouseInDto.alertDuration
       warehouseEntity.temperatureMin = warehouseInDto.minTemperature
       warehouseEntity.temperatureMax = warehouseInDto.maxTemperature
@@ -131,10 +144,11 @@ export class WerehouseService {
     async putWarehouse(warehouseInDto: WerehousePutInDto, warehouseId: number, userId: number): Promise<WarehouseEntity> {
       const warehouseEntity = await this.warehouseDao.findById(warehouseId);
 
-      if(warehouseEntity.customerWarehouseEntity.find((customer) => customer.customerEntity.id != userId)) {
+      if(!warehouseEntity.customerWarehouseEntity.find((customer) => customer.customerEntity.id == userId)) {
         throw new ForbiddenException("You are not the owner of this warehouse");
       }
 
+      warehouseEntity.name = warehouseInDto.name
       warehouseEntity.allertMinDuration = warehouseInDto.alertDuration
       warehouseEntity.temperatureMin = warehouseInDto.minTemperature
       warehouseEntity.temperatureMax = warehouseInDto.maxTemperature
@@ -155,14 +169,14 @@ export class WerehouseService {
       return WarehouseEntites;
     }
 
-    async getWarehouseLogs(warehouseId: number, userId: number, length: number, offset: number): Promise<Array<WarehouseLogsEntity>> {
+    async getWarehouseLogs(warehouseId: number, userId: number, length: number, offset: number, from: Date, to: Date, interval: number): Promise<Array<WarehouseLogsEntity>> {
       const warehouseEntity = await this.warehouseDao.findById(warehouseId);
 
-      if(warehouseEntity.customerWarehouseEntity.find((customer) => customer.customerEntity.id != userId)) {
+      if(!warehouseEntity.customerWarehouseEntity.find((customer) => customer.customerEntity.id == userId)) {
         throw new ForbiddenException("You are not the owner of this warehouse");
       }
 
-      const warehouseLogsEntityArray = await this.warehouseLogsDao.findAllByWarehouseId(warehouseId, length, offset);
+      const warehouseLogsEntityArray = await this.warehouseLogsDao.findAllByWarehouseId(warehouseId, length, offset, new Date(from), new Date(to), interval * 60);
 
       return warehouseLogsEntityArray;
     }

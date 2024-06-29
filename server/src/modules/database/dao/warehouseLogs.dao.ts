@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Raw, Repository } from 'typeorm';
+import { Raw, Repository, getConnection } from 'typeorm';
 import { WarehouseLogsEntity } from '../entity/warehouse-logs.entity';
 import { WarehouseEntity } from '../entity/warehouse.entity';
 import { format } from 'date-fns';
@@ -50,18 +50,31 @@ export class WarehouseLogsDao {
     await this.warehouseLogsRepository.delete(tempCategoryArticleEntity.id);
   }
 
-  async findAllByWarehouseId(warehouseId: number, length: number, offset: number): Promise<WarehouseLogsEntity[]> {
-    return this.warehouseLogsRepository.find({
-      where: {
-        warehouseEntity: {
-          id: warehouseId,
-        },
-      },
-      order: {
-        date: 'DESC',
-      },
-      take: length,
-      skip: offset,
-    });
+  async findAllByWarehouseId(warehouseId: number, length: number, offset: number, from: Date, to: Date, interval: number): Promise<WarehouseLogsEntity[]> {
+    const result = await this.warehouseLogsRepository.query(
+      `SELECT 
+         to_timestamp(floor(extract('epoch' from wl_measurement_date) / $6) * $6) AT TIME ZONE 'UTC' AS interval,
+         AVG(wl_temperature) as averageTemperature
+       FROM warehouse_logs
+       WHERE "warehouseEntityId" = $1 AND wl_measurement_date BETWEEN $2 AND $3
+       GROUP BY interval
+       ORDER BY interval DESC
+       LIMIT $4 OFFSET $5
+       `,
+      [warehouseId, from.toISOString(), to.toISOString(), length, offset, interval]
+    );
+
+    console.log(from.toISOString());
+    console.log(to.toISOString());
+    console.log(length);
+    console.log(offset);
+
+    return result.map(row => 
+      new WarehouseLogsEntity(
+        new Date(row.interval),
+        Number(parseFloat(row.averagetemperature).toFixed(2)),
+        null
+      )
+    );
   }
 }
