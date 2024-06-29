@@ -13,11 +13,14 @@ const WarehouseDetailScreen = () => {
     const [dateFrom, setDateFrom] = useState(new Date().setMonth(new Date().getMonth() - 4));
     const [dateTo, setDateTo] = useState(new Date());
     const [interval, setInterval] = useState(1); // Default interval to 1 minute
+    const [entriesPerPage, setEntriesPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalRecords, setTotalRecords] = useState(0);
 
     useEffect(() => {
         fetchWarehouseDetails();
         fetchRecords();
-    }, [warehouseId, dateFrom, dateTo, interval]);
+    }, [warehouseId, dateFrom, dateTo, interval, entriesPerPage, currentPage]);
 
     const fetchWarehouseDetails = async () => {
         try {
@@ -34,13 +37,14 @@ const WarehouseDetailScreen = () => {
             const queryParams = new URLSearchParams();
             if (dateFrom) queryParams.append('from', format(dateFrom, 'yyyy-MM-dd'));
             if (dateTo) queryParams.append('to', format(dateTo, 'yyyy-MM-dd'));
-            queryParams.append('offset', '0');
-            queryParams.append('length', '100');
+            queryParams.append('offset', (currentPage - 1) * entriesPerPage);
+            queryParams.append('length', entriesPerPage);
             queryParams.append('interval', interval);
 
             const response = await apiService.get(`/warehouse/${warehouseId}/record?${queryParams.toString()}`);
             const json = await response.json();
-            setRecords(json.body);
+            setRecords(json.body || []);
+            setTotalRecords(json.body.count() || 0);
         } catch (error) {
             console.error('Error fetching records:', error);
         }
@@ -69,6 +73,11 @@ const WarehouseDetailScreen = () => {
             setDateTo={setDateTo}
             interval={interval}
             setInterval={setInterval}
+            entriesPerPage={entriesPerPage}
+            setEntriesPerPage={setEntriesPerPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalRecords={totalRecords}
         />
     );
 };

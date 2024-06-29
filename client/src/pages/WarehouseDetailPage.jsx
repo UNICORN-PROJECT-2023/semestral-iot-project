@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableHead, TableRow, Box, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableHead, TableRow, Box, TextField, MenuItem, Select, FormControl, InputLabel, Pagination } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import styled, { useTheme } from 'styled-components';
 import EditWarehouseModalScreen from "../screens/EditWarehouseModalScreen";
@@ -91,8 +91,12 @@ const ThemedSelect = styled(Select)`
     }
 `;
 
-const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, handleUpdate, apiService, warehouseId, dateFrom, setDateFrom, dateTo, setDateTo, interval, setInterval }) => {
+const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode, handleUpdate, apiService, warehouseId, dateFrom, setDateFrom, dateTo, setDateTo, interval, setInterval, entriesPerPage, setEntriesPerPage, currentPage, setCurrentPage, totalRecords }) => {
     const theme = useTheme();
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    };
 
     return (
         <StyledWrapper>
@@ -166,6 +170,21 @@ const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, han
                             <MenuItem value={1440}>Day</MenuItem>
                         </ThemedSelect>
                     </FormControl>
+                    <FormControl sx={{ minWidth: 120 }}>
+                        <InputLabel id="entries-label" sx={{ color: theme.textColor }}>Entries</InputLabel>
+                        <ThemedSelect
+                            labelId="entries-label"
+                            value={entriesPerPage}
+                            onChange={(event) => setEntriesPerPage(event.target.value)}
+                            label="Entries"
+                            theme={theme}
+                            IconComponent={() => <ArrowDropDownIcon sx={{ color: theme.textColor }} />}
+                        >
+                            <MenuItem value={10}>10</MenuItem>
+                            <MenuItem value={25}>25</MenuItem>
+                            <MenuItem value={50}>50</MenuItem>
+                        </ThemedSelect>
+                    </FormControl>
                 </Box>
                 {viewMode === 'table' ? (
                     <Table>
@@ -186,6 +205,16 @@ const WarehouseDetailPage = ({ warehouse, records, viewMode, toggleViewMode, han
                     </Table>
                 ) : (
                     <Graph records={records} minTemperature={warehouse.temperatureMin} maxTemperature={warehouse.temperatureMax} />
+                )}
+                {totalRecords > entriesPerPage && (
+                    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+                        <Pagination
+                            count={Math.ceil(totalRecords / entriesPerPage)}
+                            page={currentPage}
+                            onChange={handlePageChange}
+                            color="primary"
+                        />
+                    </Box>
                 )}
             </Container>
         </StyledWrapper>
