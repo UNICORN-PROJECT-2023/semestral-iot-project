@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Typography, Container, Table, TableBody, TableCell, TableHead, TableRow, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import CreateWarehouseModalScreen from '../screens/CreateWarehouseModalScreen';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {useNotification} from "../context/NotificationContext";
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -16,20 +16,7 @@ const StyledWrapper = styled.div`
     background-color: ${props => props.theme.backgroundColor};
     color: ${props => props.theme.textColor};
 
-    // button {
-    //     color: ${props => props.theme.buttonTextColor};
-    //     border: none;
-    //     padding: 0.5rem 1rem;
-    //     border-radius: 0.5rem;
-    //     font-size: 1rem;
-    //     letter-spacing: 1px;
-    //     font-weight: bold;
-    //     cursor: ${props => props.disabled ? '' : 'pointer'};
-    //     background-image: linear-gradient(${props => props.disabled ? props.theme.buttonBackgroundDisabled : props.theme.buttonBackground}, ${props => props.disabled ? '#a8a8a8' : 'rgba(0,0,0,0.18)'});
-    // }
-    
     .btn {
-        //margin: 2rem;
         border: none;
         padding: 0.5rem 1rem;
         text-align: center;
@@ -44,7 +31,7 @@ const StyledWrapper = styled.div`
     }
 
     .btn:hover {
-        background-position: right center; /* change the direction of the change here */
+        background-position: right center;
     }
 
     .btn-1 {
@@ -56,18 +43,56 @@ const StyledWrapper = styled.div`
     }
 `;
 
+const ThemedTable = styled(Table)`
+    &.MuiTable-root {
+        color: ${props => props.theme.textColor};
+    }
+`;
+
+const ThemedTableCell = styled(TableCell)`
+    &.MuiTableCell-root {
+        color: ${props => props.theme.textColor};
+        border-bottom: 1px solid ${props => props.theme.borderColor};
+    }
+`;
+
+const ThemedDialogTitle = styled(DialogTitle)`
+    &.MuiDialogTitle-root {
+        background-color: ${props => props.theme.backgroundColor};
+        color: ${props => props.theme.textColor};
+    }
+`;
+
+const ThemedDialogContentText = styled(DialogContentText)`
+    &.MuiDialogContentText-root {
+        color: ${props => props.theme.inputTextColor};
+    }
+`;
+
+const ThemedButton = styled(Button)`
+    &.MuiButton-root {
+        color: ${props => props.theme.buttonTextColor};
+        background-color: ${props => props.theme.buttonBackground};
+        &:hover {
+            background-color: ${props => props.theme.buttonBackground};
+        }
+    }
+`;
+
 const ButtonWrapper = styled.div`
     display: flex;
     align-items: center;
 
     .detail-button {
-        margin-right: 8px; // Adjust this value to control the space between the buttons
+        margin-right: 8px;
     }
 `;
 
 const WarehousesPage = ({ warehouses, refreshWarehouses, apiService }) => {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+
+    const showNotification = useNotification();
 
     const handleDeleteClick = (warehouse) => {
         setSelectedWarehouse(warehouse);
@@ -84,8 +109,10 @@ const WarehousesPage = ({ warehouses, refreshWarehouses, apiService }) => {
             await apiService.delete(`/warehouse/${selectedWarehouse.id}`);
             refreshWarehouses();
             handleDialogClose();
+            showNotification('success', `Warehouse-${selectedWarehouse.id} deleted successfully.`);
         } catch (error) {
             console.error('Error deleting warehouse:', error);
+            showNotification('error', `Failed to delete Warehouse-${selectedWarehouse.id}.`);
         }
     };
 
@@ -96,44 +123,39 @@ const WarehousesPage = ({ warehouses, refreshWarehouses, apiService }) => {
                 <Typography variant="h4" sx={{ mb: 4 }}>
                     Warehouses
                 </Typography>
-                <Table>
+                <ThemedTable>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ color: 'inherit'}}>Name</TableCell>
-                            <TableCell sx={{ color: 'inherit'}}>Min Temperature (°C)</TableCell>
-                            <TableCell sx={{ color: 'inherit'}}>Max Temperature (°C)</TableCell>
-                            <TableCell sx={{ color: 'inherit'}}>Alert Duration (min)</TableCell>
-                            <TableCell sx={{ color: 'inherit'}}>Actions</TableCell>
+                            <ThemedTableCell>Name</ThemedTableCell>
+                            <ThemedTableCell>Min Temperature (°C)</ThemedTableCell>
+                            <ThemedTableCell>Max Temperature (°C)</ThemedTableCell>
+                            <ThemedTableCell>Alert Duration (min)</ThemedTableCell>
+                            <ThemedTableCell>Actions</ThemedTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {warehouses.map((wh) => (
                             <TableRow key={wh.id}>
-                                <TableCell sx={{ color: 'inherit'}}>{wh.name}</TableCell>
-                                <TableCell sx={{ color: 'inherit'}}>{wh.temperatureMin}</TableCell>
-                                <TableCell sx={{ color: 'inherit'}}>{wh.temperatureMax}</TableCell>
-                                <TableCell sx={{ color: 'inherit'}}>{wh.allertMinDuration}</TableCell>
-                                <TableCell sx={{ color: 'inherit'}}>
+                                <ThemedTableCell>{wh.name}</ThemedTableCell>
+                                <ThemedTableCell>{wh.temperatureMin}</ThemedTableCell>
+                                <ThemedTableCell>{wh.temperatureMax}</ThemedTableCell>
+                                <ThemedTableCell>{wh.allertMinDuration}</ThemedTableCell>
+                                <ThemedTableCell>
                                     <ButtonWrapper>
                                         <Link to={`/warehouses/${wh.id}`} style={{ textDecoration: 'none' }}>
-                                            <button className="btn-1 btn"
-                                                    // whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                                                >
+                                            <button className="btn-1 btn">
                                                 Detail
                                             </button>
                                         </Link>
-                                        <button className="btn btn-1"
-                                                       // whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                                                       onClick={() => handleDeleteClick(wh)} aria-label="delete" sx={{ color: 'inherit' }}
-                                        >
+                                        <button className="btn btn-1" onClick={() => handleDeleteClick(wh)} aria-label="delete">
                                             <DeleteIcon />
                                         </button>
                                     </ButtonWrapper>
-                                </TableCell>
+                                </ThemedTableCell>
                             </TableRow>
                         ))}
                     </TableBody>
-                </Table>
+                </ThemedTable>
             </Container>
 
             <Dialog
@@ -142,19 +164,19 @@ const WarehousesPage = ({ warehouses, refreshWarehouses, apiService }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
+                <ThemedDialogTitle id="alert-dialog-title">{"Confirm Deletion"}</ThemedDialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <ThemedDialogContentText id="alert-dialog-description">
                         Are you sure you want to delete Warehouse-{selectedWarehouse?.id}?
-                    </DialogContentText>
+                    </ThemedDialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleDialogClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleDeleteConfirm} color="primary" autoFocus>
+                    <ThemedButton onClick={handleDeleteConfirm} color="primary" autoFocus>
                         Delete
-                    </Button>
+                    </ThemedButton>
                 </DialogActions>
             </Dialog>
         </StyledWrapper>

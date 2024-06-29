@@ -88,10 +88,13 @@ function Navbar({ toggleTheme }) {
 
     return (
         <NavbarWrapper className="navbar fixed-top navbar-expand-lg navbar-dark">
-            <Link className="navbar-brand" to="/" >
-                <img src={logo} width="70" height="70" alt="" />
+            <Link className="navbar-brand" to="/">
+                <img src={logo} width="70" height="70" alt=""/>
             </Link>
-            <button className="navbar-toggler" type="button" style={{ margin: '0.4rem 2rem' }} onClick={handleSidebarToggle} aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
+            <h3><span>ServerRoomWatch</span></h3>
+            <button className="navbar-toggler" type="button" style={{margin: '0.4rem 2rem'}}
+                    onClick={handleSidebarToggle} aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
             <div className={`offcanvas offcanvas-end${showSidebar ? ' show' : ''}`} tabIndex="-1" id="sidebar">
@@ -99,31 +102,31 @@ function Navbar({ toggleTheme }) {
                     <button type="button" className="btn-close text-reset" onClick={handleSidebarToggle}></button>
                 </div>
                 <div className="offcanvas-body d-flex justify-content-end">
-                    <ul className="navbar-nav" style={{ gap: '2rem', margin: '0.4rem 2rem' }}>
+                    <ul className="navbar-nav" style={{gap: '2rem', margin: '0.4rem 2rem'}}>
                         {subPages.map((page) => (
                             (!page.loggedIn || data.username) && (
                                 <motion.li
-                                    whileHover={{ scale: 1.2 }}
-                                    whileTap={{ scale: 0.9 }}
+                                    whileHover={{scale: 1.2}}
+                                    whileTap={{scale: 0.9}}
                                     className="nav-item"
                                     key={page.name}
                                 >
                                     <Link className="nav-link link-with-underline" style={linkStyle} to={page.path}
-                                        onClick={handleSidebarToggle}>
+                                          onClick={handleSidebarToggle}>
                                         {page.name}
                                     </Link>
                                 </motion.li>
                             )
                         ))}
                         {data.username && (
-                            <motion.li whileHover={{ scale: 1.2 }}
-                                whileTap={{ scale: 0.9 }} className="nav-item">
+                            <motion.li whileHover={{scale: 1.2}}
+                                       whileTap={{scale: 0.9}} className="nav-item">
                                 <Link className="nav-link link-with-underline" onClick={() => logout()}
-                                    style={linkStyle} to="/">Logout</Link>
+                                      style={linkStyle} to="/">Logout</Link>
                             </motion.li>
                         )}
                         <ToggleButton onClick={toggleTheme}>
-                            {theme.theme === 'dark' ? <FaMoon /> : <FaSun />}
+                            {theme.theme === 'dark' ? <FaMoon/> : <FaSun/>}
                         </ToggleButton>
                     </ul>
                 </div>

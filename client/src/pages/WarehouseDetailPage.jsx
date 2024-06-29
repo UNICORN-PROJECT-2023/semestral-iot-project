@@ -99,6 +99,19 @@ const ThemedPagination = styled(Pagination)`
     }
 `;
 
+const ThemedTable = styled(Table)`
+    &.MuiTable-root {
+        color: ${props => props.theme.textColor};
+    }
+`;
+
+const ThemedTableCell = styled(TableCell)`
+    &.MuiTableCell-root {
+        color: ${props => props.theme.textColor};
+        border-bottom: 1px solid ${props => props.theme.borderColor};
+    }
+`;
+
 const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode, handleUpdate, apiService, warehouseId, dateFrom, setDateFrom, dateTo, setDateTo, interval, setInterval, entriesPerPage, setEntriesPerPage, currentPage, setCurrentPage, totalRecords }) => {
     const theme = useTheme();
 
@@ -195,22 +208,22 @@ const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode
                     </FormControl>
                 </Box>
                 {viewMode === 'table' ? (
-                    <Table>
+                    <ThemedTable>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ color: 'inherit', fontWeight: 'bold', fontSize: '1.1rem' }}>Date</TableCell>
-                                <TableCell sx={{ color: 'inherit', fontWeight: 'bold', fontSize: '1.1rem' }}>Temperature (°C)</TableCell>
+                                <ThemedTableCell>Date</ThemedTableCell>
+                                <ThemedTableCell>Temperature (°C)</ThemedTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {records.map((record, index) => (
                                 <TableRow key={index}>
-                                    <TableCell sx={{ color: 'inherit' }}>{new Date(record.date).toLocaleString()}</TableCell>
-                                    <TableCell sx={{ color: 'inherit' }}>{record.temperature}</TableCell>
+                                    <ThemedTableCell>{new Date(record.date).toLocaleString()}</ThemedTableCell>
+                                    <ThemedTableCell>{record.temperature}</ThemedTableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
-                    </Table>
+                    </ThemedTable>
                 ) : (
                     <Graph records={records.slice().reverse()} minTemperature={warehouse.temperatureMin} maxTemperature={warehouse.temperatureMax} />
                 )}
