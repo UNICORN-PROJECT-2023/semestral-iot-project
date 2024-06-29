@@ -96,7 +96,7 @@ const CreateWarehouseModalPage = (props) => {
                         />
                         <TextField
                             type="number"
-                            label="Minimum Temperature"
+                            label="Minimum Temperature (°C)"
                             variant="outlined"
                             name="minTemperature"
                             value={formData.minTemperature}
@@ -110,7 +110,7 @@ const CreateWarehouseModalPage = (props) => {
                         />
                         <TextField
                             type="number"
-                            label="Maximum Temperature"
+                            label="Maximum Temperature (°C)"
                             variant="outlined"
                             name="maxTemperature"
                             value={formData.maxTemperature}

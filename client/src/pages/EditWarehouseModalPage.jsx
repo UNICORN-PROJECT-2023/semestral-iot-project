@@ -89,7 +89,7 @@ const EditWarehouseModalPage = ({
                                 }}
                             />
                             <TextField
-                                label="Minimum Temperature"
+                                label="Minimum Temperature (°C)"
                                 variant="outlined"
                                 name="minTemperature"
                                 type="number"
@@ -103,7 +103,7 @@ const EditWarehouseModalPage = ({
                                 }}
                             />
                             <TextField
-                                label="Maximum Temperature"
+                                label="Maximum Temperature (°C)"
                                 variant="outlined"
                                 name="maxTemperature"
                                 type="number"

@@ -173,7 +173,7 @@ const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode
                         </ThemedSelect>
                     </FormControl>
                     <FormControl sx={{ minWidth: 120 }}>
-                        <InputLabel id="entries-label" sx={{ color: theme.textColor }}>Entries</InputLabel>
+                        <InputLabel id="entries-label" sx={{ color: theme.textColor }}>Page size</InputLabel>
                         <ThemedSelect
                             labelId="entries-label"
                             value={entriesPerPage}
@@ -185,7 +185,6 @@ const WarehouseDetailPage = ({ warehouse, records = [], viewMode, toggleViewMode
                             <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={25}>25</MenuItem>
                             <MenuItem value={50}>50</MenuItem>
-                            <MenuItem value={99999}>All</MenuItem>
                         </ThemedSelect>
                     </FormControl>
                 </Box>
